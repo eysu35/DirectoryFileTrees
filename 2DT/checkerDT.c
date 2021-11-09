@@ -146,6 +146,12 @@ boolean CheckerDT_isValid(boolean isInit, Node_T root, size_t count) {
       }
 
    }
+
+   /* check to make sure root has no parent */
+   if (Node_getParent(root) != NULL){
+      fprintf(stderr, "Root has parent node\n");
+      return FALSE;
+   }
    
 
    /* Now checks invariants recursively at each node from the root. */
