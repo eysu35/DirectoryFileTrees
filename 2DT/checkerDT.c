@@ -48,14 +48,17 @@ boolean CheckerDT_Node_isValid(Node_T n) {
          fprintf(stderr, "C's path has grandchild of P's path\n");
          return FALSE;
       }
+
+         /* check that children nodes are in sorted order */
+      for (i = 0; i < Node_getNumChildren(parent) - 1; i++){
+         if (Node_compare(Node_getChild(parent, i), Node_getChild(parent, i+1)) >= 0){
+            fprintf(stderr, "P's children are not in sorted order");
+         }
+      }
+
    }
 
-   /* check that children nodes are in sorted order */
-   for (i = 0; i < Node_getNumChildren(parent) - 1; i++){
-      if (Node_compare(Node_getChild(parent, i), Node_getChild(parent, i+1)) >= 0){
-         fprintf(stderr, "P's children are not in sorted order");
-      }
-   }
+
 
    return TRUE;
 }
