@@ -30,6 +30,7 @@ boolean CheckerDT_Node_isValid(Node_T n) {
 
       /* Sample check that parent's path must be prefix of n's path */
       ppath = Node_getPath(parent);
+
       if(ppath == NULL) {
          fprintf(stderr, "Null path\n");
          return FALSE;
@@ -47,6 +48,17 @@ boolean CheckerDT_Node_isValid(Node_T n) {
          fprintf(stderr, "C's path has grandchild of P's path\n");
          return FALSE;
       }
+   }
+
+   /* check that children nodes are in sorted order */
+   for (i = 0; i < DynArray_getLength(parent->children) - 1; i++){
+      if (strcmp(parent->children[i], parent->children[i + 1]) >= 0){
+         fprintf(stderr, "P's children are not in sorted order");
+      }
+   }
+
+   while (parent->children[i] != NULL){
+      if (strcmp(parent->children[i] < parent->children[i])
    }
 
    return TRUE;
@@ -98,4 +110,6 @@ boolean CheckerDT_isValid(boolean isInit, Node_T root, size_t count) {
 
    /* Now checks invariants recursively at each node from the root. */
    return CheckerDT_treeCheck(root);
+
+
 }
