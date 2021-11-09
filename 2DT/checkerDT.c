@@ -136,15 +136,13 @@ boolean CheckerDT_isValid(boolean isInit, Node_T root, size_t count) {
    if (isInit){
       if (root == NULL){
          if (count != 0){
-            fprintf(stderr, "Initialized DT with NULL root, 
-            but count != 0\n");
+            fprintf(stderr, "Initialized DT with NULL root, but count != 0\n");
             return FALSE;
          }
       }
       if (root != NULL){
          if (count == 0){
-            fprintf(stderr, "Initialized DT with non NULL root,
-            but count == 0\n");
+            fprintf(stderr, "Initialized DT with non NULL root, but count == 0\n");
             return FALSE;
          }
       }
