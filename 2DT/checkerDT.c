@@ -51,8 +51,8 @@ boolean CheckerDT_Node_isValid(Node_T n) {
    }
 
    /* check that children nodes are in sorted order */
-   for (i = 0; i < DynArray_getLength(parent->children) - 1; i++){
-      if (strcmp(parent->children[i], parent->children[i + 1]) >= 0){
+   for (i = 0; i < Node_getNumChildren(parent) - 1; i++){
+      if (Node_compare(Node_getChild(parent, i), Node_getChild(parent, i+1)) >= 0){
          fprintf(stderr, "P's children are not in sorted order");
       }
    }
