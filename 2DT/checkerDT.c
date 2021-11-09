@@ -51,6 +51,16 @@ boolean CheckerDT_Node_isValid(Node_T n) {
 
          /* check that children nodes are in sorted order */
       for (i = 0; i < Node_getNumChildren(parent) - 1; i++){
+         /* check that the children are not null */
+         if (Node_getChild(parent, i) == NULL){
+            fprintf(stderr, "P has a NULL child node");
+            return FALSE;
+         }
+          if (Node_getChild(parent, i + 1) == NULL){
+            fprintf(stderr, "P has a NULL child node");
+            return FALSE;
+         }
+
          if (Node_compare(Node_getChild(parent, i), Node_getChild(parent, i+1)) >= 0){
             fprintf(stderr, "P's children are not in sorted order");
          }
