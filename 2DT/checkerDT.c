@@ -17,6 +17,7 @@ boolean CheckerDT_Node_isValid(Node_T n) {
    const char* ppath;
    const char* rest;
    size_t i;
+   size_t num_children;
 
    /* Sample check: a NULL pointer is not a valid node */
    if(n == NULL) {
@@ -32,7 +33,7 @@ boolean CheckerDT_Node_isValid(Node_T n) {
       ppath = Node_getPath(parent);
 
       if(ppath == NULL) {
-         fprintf(stderr, "Null path\n");
+         fprintf(stderr, "P has NULL path\n");
          return FALSE;
       }
       i = strlen(ppath);
@@ -49,15 +50,16 @@ boolean CheckerDT_Node_isValid(Node_T n) {
          return FALSE;
       }
 
-         /* check that children nodes are in sorted order */
-      for (i = 0; i < Node_getNumChildren(parent) - 1; i++){
+      /* check that children nodes are in sorted order */
+      num_children = Node_getNumChildren(parent);
+      for (i = 0; i < num_children - 1; i++){
          /* check that the children are not null */
          if (Node_getChild(parent, i) == NULL){
             fprintf(stderr, "P has a NULL child node\n");
             return FALSE;
          }
           if (Node_getChild(parent, i + 1) == NULL){
-            fprintf(stderr, "P has a NULL child node\n");
+            fprintf(stderr, "P has a NULL child node!\n");
             return FALSE;
          }
 
