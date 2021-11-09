@@ -57,10 +57,6 @@ boolean CheckerDT_Node_isValid(Node_T n) {
       }
    }
 
-   while (parent->children[i] != NULL){
-      if (strcmp(parent->children[i] < parent->children[i])
-   }
-
    return TRUE;
 }
 
