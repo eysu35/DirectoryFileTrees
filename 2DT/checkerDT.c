@@ -121,14 +121,12 @@ boolean CheckerDT_isValid(boolean isInit, Node_T root, size_t count) {
       if(count != 0) {
          fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;
+      }
 
       /* if DT is not initialized, root should be NULL */
       if(root != NULL){
          fprintf(stderr, "Not initialized, but root is not NULL\n");
          return FALSE;
-      }
-
-
       }
    }
    /* check if DT is initialized, either root is NULL and count = 0
