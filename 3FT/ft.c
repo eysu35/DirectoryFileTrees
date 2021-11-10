@@ -1,19 +1,32 @@
 /*--------------------------------------------------------------------*/
-/* ft.c                                                              */
-/* Authors: Michael Garcia and Ellen Su                 */
+/* ft.c                                                               */
+/* Authors: Michael Garcia and Ellen Su                               */
 /*--------------------------------------------------------------------*/
 
-#ifndef FT_INCLUDED
-#define FT_INCLUDED
+#include <assert.h>
+#include <string.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdlib.h>
+
+#include "a4def.h"
+#include "dynarray.h"
+#include "ft.h"
+#include "node.h"
+#include "../2DT/checkerDT.h"
 
 /*
   A File Tree is a representation of a hierarchy of directories and
   files: the File Tree is rooted at a directory, directories
-  may be leaves or non-leaves, and files are always leaves.
+  may be leaves or non-leaves, and files are always leaves. It is
+  an AO with  3 state variables:
 */
-
-#include <stddef.h>
-#include "a4def.h"
+/* a flag for if it is in an initialized state (TRUE) or not (FALSE) */
+static boolean isInitialized;
+/* a pointer to the root node in the hierarchy */
+static Node_T root;
+/* a counter of the number of nodes in the hierarchy */
+static size_t count;
 
 /*
    Inserts a new directory into the tree at path, if possible.
@@ -128,5 +141,3 @@ int FT_destroy(void);
   which is then owned by client!
 */
 char *FT_toString(void);
-
-#endif
