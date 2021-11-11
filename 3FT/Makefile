@@ -7,7 +7,7 @@ TARGETS = ft
 
 .PRECIOUS: %.o
 
-all: ft
+all: $(TARGETS)
 
 clean:
 	rm -f $(TARGETS) *~
@@ -15,7 +15,7 @@ clean:
 clobber: clean
 	rm -f node.o ft.o dynarray.o checkerFT.o ft_client.o
 
-dt: dynarray.o node.o checkerFT.o ft.o ft_client.o
+ft: dynarray.o node.o checkerFT.o ft.o ft_client.o
 	gcc217 -g $^ -o $@
 
 checkerFT.o: checkerFT.c dynarray.h ../2DT/checkerDT.h node.h a4def.h
