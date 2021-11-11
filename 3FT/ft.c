@@ -195,7 +195,7 @@ boolean FT_containsDir(char *path) {
     Node_T curr;
     boolean result;
 
-    assert(CheckerDT_isValid(isInitialized,root,count));
+    assert(CheckerFT_isValid(isInitialized,root,count));
     assert(path != NULL);
 
     if(!isInitialized)
@@ -210,7 +210,7 @@ boolean FT_containsDir(char *path) {
     else
         result = TRUE;
 
-    assert(CheckerDT_isValid(isInitialized,root,count));
+    assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
 }
 
@@ -257,7 +257,7 @@ int FT_rmDir(char *path) {
     Node_T curr;
     int result;
 
-    assert(CheckerDT_isValid(isInitialized,root,count));
+    assert(CheckerFT_isValid(isInitialized,root,count));
     assert(path != NULL);
 
     if(!isInitialized)
@@ -269,7 +269,7 @@ int FT_rmDir(char *path) {
     else
         result = FT_rmPathAt(path, curr);
 
-    assert(CheckerDT_isValid(isInitialized,root,count));
+    assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
 }
 
@@ -341,13 +341,13 @@ int FT_stat(char *path, boolean *type, size_t *length);
   and SUCCESS otherwise.
 */
 int FT_init(void) {
-    assert(CheckerDT_isValid(isInitialized,root,count));
+    assert(CheckerFT_isValid(isInitialized,root,count));
     if(isInitialized)
         return INITIALIZATION_ERROR;
     isInitialized = 1;
     root = NULL;
     count = 0;
-    assert(CheckerDT_isValid(isInitialized,root,count));
+    assert(CheckerFT_isValid(isInitialized,root,count));
     return SUCCESS;
 }
 
@@ -357,7 +357,59 @@ int FT_init(void) {
   Returns INITIALIZATION_ERROR if not already initialized,
   and SUCCESS otherwise.
 */
-int FT_destroy(void);
+int FT_destroy(void) {
+    assert(CheckerFT_isValid(isInitialized,root,count));
+    if(!isInitialized)
+        return INITIALIZATION_ERROR;
+    FT_removePathFrom(root);
+    root = NULL;
+    isInitialized = 0;
+    assert(CheckerFT_isValid(isInitialized,root,count));
+    return SUCCESS;
+}
+
+/*
+   Performs a pre-order traversal of the tree rooted at n,
+   inserting each payload to DynArray_T d beginning at index i.
+   Returns the next unused index in d after the insertion(s).
+*/
+static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) {
+   size_t c;
+
+   assert(d != NULL);
+
+   if(n != NULL) {
+      (void) DynArray_set(d, i, Node_getPath(n));
+      i++;
+      for(c = 0; c < Node_getNumChildren(n); c++)
+         i = FT_preOrderTraversal(Node_getChild(n, c), d, i);
+   }
+   return i;
+}
+
+/*
+   Alternate version of strlen that uses pAcc as an in-out parameter
+   to accumulate a string length, rather than returning the length of
+   str, and also always adds one more in addition to str's length.
+*/
+static void FT_strlenAccumulate(char* str, size_t* pAcc) {
+   assert(pAcc != NULL);
+
+   if(str != NULL)
+      *pAcc += (strlen(str) + 1);
+}
+
+/*
+   Alternate version of strcat that inverts the typical argument
+   order, appending str onto acc, and also always adds a newline at
+   the end of the concatenated string.
+*/
+static void FT_strcatAccumulate(char* str, char* acc) {
+   assert(acc != NULL);
+
+   if(str != NULL)
+      strcat(acc, str); strcat(acc, "\n");
+}
 
 /*
   Returns a string representation of the
@@ -367,4 +419,32 @@ int FT_destroy(void);
   Allocates memory for the returned string,
   which is then owned by client!
 */
-char *FT_toString(void);
+char *FT_toString(void) {
+    DynArray_T nodes;
+    size_t totalStrlen = 1;
+    char* result = NULL;
+
+    assert(CheckerFT_isValid(isInitialized,root,count));
+
+    if(!isInitialized)
+        return NULL;
+
+    nodes = DynArray_new(count);
+    (void) FT_preOrderTraversal(root, nodes, 0);
+
+    DynArray_map(nodes, (void (*)(void *, void*)) FT_strlenAccumulate, (void*) &totalStrlen);
+
+    result = malloc(totalStrlen);
+    if(result == NULL) {
+        DynArray_free(nodes);
+        assert(CheckerFT_isValid(isInitialized,root,count));
+        return NULL;
+    }
+    *result = '\0';
+
+    DynArray_map(nodes, (void (*)(void *, void*)) FT_strcatAccumulate, (void *) result);
+
+    DynArray_free(nodes);
+    assert(CheckerFT_isValid(isInitialized,root,count));
+    return result;
+}
