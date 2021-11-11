@@ -141,7 +141,6 @@ const char* Node_getPath(Node_T n) {
 }
 
 /* see node.h for specification */
-
 int Node_getType(Node_T n) {
    assert(n != NULL);
    
@@ -238,7 +237,7 @@ char* Node_getFileContents(Node_T n){
    assert(n != NULL);
    assert(n->type == FT_FILE);
 
-   return n->contents;
+   return (char*) n->contents;
 }
 
 /* see node.h for specification */
