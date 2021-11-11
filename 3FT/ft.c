@@ -38,12 +38,16 @@ static Node_T FT_getEndofPathNode(char *path, Node_T curr) {
     if(curr == NULL)
         return NULL;
 
-    else if(!strcmp(path,Node_getPath(curr)))
+    /* If query path and path to current node are equivalent (and the current
+    node is a directory), return the currrent node.*/
+    else if(!strcmp(path,Node_getPath(curr)) && Node_getType(curr) == DIRECTORY)
         return curr;
 
+    /* Otherwise, if the current path to the node matches the query path to
+    that point, examine the current node's children to see if the query path exists there. */
     else if(!strncmp(path, Node_getPath(curr), strlen(Node_getPath(curr)))) {
         for(i = 0; i < Node_getNumChildren(curr); i++) {
-            found = FT_traversePathFrom(path,
+            found = FT_getEndOfPathNode(path,
                                     Node_getChild(curr, i));
             if(found != NULL)
                 return found;
