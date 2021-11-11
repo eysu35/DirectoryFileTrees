@@ -170,7 +170,7 @@ static int FT_insertLastFileNode(char* path, Node_T parent, char* contents){
     assert(path != NULL);
     assert(parent != NULL);
 
-    new = Node_create(dirToken, curr, FILE);
+    new = Node_create(path, parent, FT_FILE);
     if (new == NULL){
         return NULL;
     }
@@ -182,19 +182,15 @@ static int FT_insertLastFileNode(char* path, Node_T parent, char* contents){
     }
   
     count += 1;
-    new->path = path;
-    new->parent = parent;
-    
+
     /* allocate memory to store file contents and connect pointer from 
     new file node to contents */
-    pcontents = malloc(strlen(contents) + 1)
-    if (pcontents == NULL){
-
-        return NULL;
+    result = Node_updateFileContents(new, contents);
+    if (result != SUCCESS){
+        (void) Node_destroy(new);
+        return result;
     }
-    new->contents = pcontents;
     return SUCCESS;
-
 }
 
 /*
@@ -337,15 +333,17 @@ int FT_insertFile(char *path, void *contents, size_t length){
         return INITIALIZATION_ERROR;
 
     /* set current to last existing node in the path */ 
-    curr = FT_getEndOfPathNode;
-    result = FT_insertRestOfPath(path, curr, FILE);
+    curr = FT_getEndOfPathNode(path);
+    result = FT_insertRestOfPath(path, curr, FT_FILE);
 
 
     /* ADD SOMETHING HERE */
+    /*
     if (result == ????){
         curr = FT_getEndOfPathNode;
         result = FT_insertLastFileNode(path, curr, contents)
     }
+    */ 
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
@@ -372,7 +370,7 @@ boolean FT_containsFile(char *path){
     else if (strcmp(path, Node_getPath(curr)))
         return FALSE;
     else{
-        assert(Node_getType(curr) = FILE);
+        assert(Node_getType(curr) == FT_FILE);
         result = TRUE;
     }
 
@@ -398,10 +396,10 @@ int FT_rmFile(char *path){
     if (!isInitialized)
         return INITIALIZATION_ERROR;
     
-    curr = FT_getEndOfPathNode;
+    curr = FT_getEndOfPathNode(path);
     if (curr == NULL)
         return NO_SUCH_PATH;
-    assert(Node_getType(curr) == FILE);
+    assert(Node_getType(curr) == FT_FILE);
 
     parent = Node_getParent(curr);
     Node_unlinkChild(parent, curr);
@@ -433,7 +431,7 @@ void *FT_getFileContents(char *path){
     if (Node_getType(curr) == DIRECTORY){
         return NULL;
     }
-    contents = Node_getFileContents(curr)
+    contents = Node_getFileContents(curr);
     return contents;
 }
 
