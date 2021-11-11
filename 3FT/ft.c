@@ -39,7 +39,8 @@ static Node_T FT_getEndofPathNode(char *path, Node_T curr) {
         return NULL;
 
     /* If query path and path to current node are equivalent (and the current
-    node is a directory), return the currrent node.*/
+    node is a directory), return the currrent node. If they match and
+    are not a directory, return NOT_A_DIRECTORY. */
     else if(!strcmp(path,Node_getPath(curr))) { 
         if (Node_getType(curr) == DIRECTORY) {
             return curr;
@@ -190,7 +191,60 @@ int FT_insertDir(char *path) {
   Returns TRUE if the tree contains the full path parameter as a
   directory and FALSE otherwise.
 */
-boolean FT_containsDir(char *path);
+boolean FT_containsDir(char *path) {
+    Node_T curr;
+    boolean result;
+
+    assert(CheckerDT_isValid(isInitialized,root,count));
+    assert(path != NULL);
+
+    if(!isInitialized)
+        return FALSE;
+
+    curr = FT_getEndOfPathNode(path);
+
+    if(curr == NULL)
+        result = FALSE;
+    else if(strcmp(path, Node_getPath(curr)))
+        result = FALSE;
+    else
+        result = TRUE;
+
+    assert(CheckerDT_isValid(isInitialized,root,count));
+    return result;
+}
+
+/*
+  Removes the directory hierarchy rooted at path starting from
+  curr. If curr is the data structure's root, root becomes NULL.
+
+  Returns NO_SUCH_PATH if curr is not the node for path,
+  and SUCCESS otherwise.
+ */
+static int FT_rmPathAt(char* path, Node_T curr) {
+   Node_T parent;
+
+   assert(path != NULL);
+   assert(curr != NULL);
+
+   parent = Node_getParent(curr);
+
+   if(!strcmp(path,Node_getPath(curr))) {
+        if(parent == NULL)
+            root = NULL;
+        else
+            Node_unlinkChild(parent, curr);
+
+        /* Taken from DT_removePathFrom. */
+        if(curr != NULL) {
+            count -= Node_destroy(curr);
+        }
+      return SUCCESS;
+   }
+   else
+      return NO_SUCH_PATH;
+
+}
 
 /*
   Removes the FT hierarchy rooted at the directory path.
@@ -199,7 +253,25 @@ boolean FT_containsDir(char *path);
   Returns NOT_A_DIRECTORY if path exists but is a file not a directory.
   Returns NO_SUCH_PATH if the path does not exist in the hierarchy.
 */
-int FT_rmDir(char *path);
+int FT_rmDir(char *path) {
+    Node_T curr;
+    int result;
+
+    assert(CheckerDT_isValid(isInitialized,root,count));
+    assert(path != NULL);
+
+    if(!isInitialized)
+        return INITIALIZATION_ERROR;
+
+    curr = FT_getEndOfPathNode(path);
+    if(curr == NULL)
+        result =  NO_SUCH_PATH;
+    else
+        result = FT_rmPathAt(path, curr);
+
+    assert(CheckerDT_isValid(isInitialized,root,count));
+    return result;
+}
 
 /*
    Inserts a new file into the hierarchy at the given path, with the
