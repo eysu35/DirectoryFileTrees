@@ -226,11 +226,11 @@ int Node_updateFileContents(Node_T n, char *contents) {
       return PARENT_CHILD_ERROR;
    }
 
-   if(DynArray_addAt(n->contents, i, contents) == TRUE) {
-      assert(CheckerDT_Node_isValid(n));
-      return SUCCESS;
+   if(DynArray_addAt(n->contents, i, contents) != TRUE) {
+      return 0;
    }
-   return (int) NULL;
+   assert(CheckerDT_Node_isValid(n));
+   return SUCCESS;
 }
 
 /* see node.h for specification */
