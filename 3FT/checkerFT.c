@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------*/
-/* checkerDT.c                                                        */
+/* checkerFT.c                                                        */
 /* Authors: Michael Garcia and Ellen Su                               */
 /*--------------------------------------------------------------------*/
 
@@ -7,11 +7,11 @@
 #include <stdio.h>
 #include <string.h>
 #include "dynarray.h"
-#include "../2DT/checkerDT.h"
+#include "checkerFT.h"
 
 
-/* see checkerDT.h for specification */
-boolean CheckerDT_Node_isValid(Node_T n) {
+/* see checkerFT.h for specification */
+boolean CheckerFT_Node_isValid(Node_T n) {
    Node_T parent;
    const char* npath;
    const char* ppath;
@@ -89,14 +89,14 @@ boolean CheckerDT_Node_isValid(Node_T n) {
    parameter list to facilitate constructing your checks.
    If you do, you should update this function comment.
 */
-static boolean CheckerDT_treeCheck(Node_T n) {
+static boolean CheckerFT_treeCheck(Node_T n) {
    size_t c;
 
    if(n != NULL) {
 
       /* Sample check on each non-root node: node must be valid */
       /* If not, pass that failure back up immediately */
-      if(!CheckerDT_Node_isValid(n))
+      if(!CheckerFT_Node_isValid(n))
          return FALSE;
 
 
@@ -106,15 +106,15 @@ static boolean CheckerDT_treeCheck(Node_T n) {
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
-         if(!CheckerDT_treeCheck(child))
+         if(!CheckerFT_treeCheck(child))
             return FALSE;
       }
    }
    return TRUE;
 }
 
-/* see checkerDT.h for specification */
-boolean CheckerDT_isValid(boolean isInit, Node_T root, size_t count) {
+/* see CheckerFT.h for specification */
+boolean CheckerFT_isValid(boolean isInit, Node_T root, size_t count) {
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
@@ -159,7 +159,7 @@ boolean CheckerDT_isValid(boolean isInit, Node_T root, size_t count) {
    
 
    /* Now checks invariants recursively at each node from the root. */
-   return CheckerDT_treeCheck(root);
+   return CheckerFT_treeCheck(root);
 
 
 }
