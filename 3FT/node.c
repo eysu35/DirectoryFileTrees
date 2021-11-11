@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include "a4def.h"
 #include "dynarray.h"
 #include "node.h"
 #include "checkerDT.h"
@@ -25,7 +26,7 @@ struct node {
 
    /* set type to 0 to indicate file node or 1 to
    indicate directory node. */
-   int type;
+   nodeType type;
 
    /* either the children of a directory or the contents
    of a file are stored. Children will be stored in lexicographic 
@@ -66,7 +67,7 @@ static char* Node_buildPath(Node_T n, const char* dir) {
 }
 
 /* see node.h for specification */
-Node_T Node_create(const char* dir, Node_T parent, int type){
+Node_T Node_create(const char* dir, Node_T parent, nodeType type){
    Node_T new;
 
    assert(parent == NULL || CheckerDT_Node_isValid(parent));
@@ -217,8 +218,8 @@ int Node_linkChild(Node_T parent, Node_T child) {
    assert(CheckerDT_Node_isValid(child));
    /* Assert to check a file does not have a
    file as a child. */
-   if (parent->type == 1) {
-      assert(child->type != 1);
+   if (parent->type == FILE) {
+      assert(child->type != FILE);
    }
 
    if(Node_hasChild(parent, child->path, NULL)) {
@@ -290,7 +291,7 @@ int  Node_unlinkChild(Node_T parent, Node_T child) {
 
 
 /* see node.h for specification */
-int Node_addChild(Node_T parent, const char* dir, int type) {
+int Node_addChild(Node_T parent, const char* dir, nodeType type) {
    Node_T new;
    int result;
 

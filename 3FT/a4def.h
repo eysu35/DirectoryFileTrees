@@ -14,7 +14,7 @@ enum { SUCCESS,
 };
 
 /* In lieu of a proper boolean datatype */
-enum bool { FALSE, TRUE };
-typedef enum bool boolean;
+enum type { DIRECTORY, FILE };
+typedef enum type nodeType;
 
 #endif
