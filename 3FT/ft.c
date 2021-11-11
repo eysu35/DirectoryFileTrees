@@ -29,7 +29,7 @@ static Node_T root;
 static size_t count;
 
 
-static Node_T FT_getEndofPathNode(char *path, Node_T curr) {
+static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
     Node_T found;
     size_t i;
 
@@ -215,7 +215,7 @@ int FT_insertDir(char *path) {
     
     /* Gets node at the end of the query path, so we can insert directory
     at the end of this path. */
-    curr = FT_getEndOfPathNode(path);
+    curr = FT_getEndOfPathNode(path, root);
     
     /* Inserts path at the farthest node in the current path. */
     result = FT_insertRestOfPath(path, curr, DIRECTORY);
@@ -237,7 +237,7 @@ boolean FT_containsDir(char *path) {
     if(!isInitialized)
         return FALSE;
 
-    curr = FT_getEndOfPathNode(path);
+    curr = FT_getEndOfPathNode(path, root);
 
     if(curr == NULL)
         result = FALSE;
@@ -300,7 +300,7 @@ int FT_rmDir(char *path) {
     if(!isInitialized)
         return INITIALIZATION_ERROR;
 
-    curr = FT_getEndOfPathNode(path);
+    curr = FT_getEndOfPathNode(path, root);
     if(curr == NULL)
         result =  NO_SUCH_PATH;
     else
@@ -333,7 +333,7 @@ int FT_insertFile(char *path, void *contents, size_t length){
         return INITIALIZATION_ERROR;
 
     /* set current to last existing node in the path */ 
-    curr = FT_getEndOfPathNode(path);
+    curr = FT_getEndOfPathNode(path, root);
     result = FT_insertRestOfPath(path, curr, FT_FILE);
 
 
@@ -364,7 +364,7 @@ boolean FT_containsFile(char *path){
     if (!isInitialized)
         return FALSE;
 
-    curr = FT_getEndOfPathNode(path);
+    curr = FT_getEndOfPathNode(path, root);
     if (curr == NULL)
         return FALSE;
     else if (strcmp(path, Node_getPath(curr)))
@@ -396,7 +396,7 @@ int FT_rmFile(char *path){
     if (!isInitialized)
         return INITIALIZATION_ERROR;
     
-    curr = FT_getEndOfPathNode(path);
+    curr = FT_getEndOfPathNode(path, root);
     if (curr == NULL)
         return NO_SUCH_PATH;
     assert(Node_getType(curr) == FT_FILE);
@@ -427,7 +427,7 @@ void *FT_getFileContents(char *path){
         return NULL;
     }
 
-    curr = FT_getEndOfPathNode(path);
+    curr = FT_getEndOfPathNode(path, root);
     if (Node_getType(curr) == DIRECTORY){
         return NULL;
     }
