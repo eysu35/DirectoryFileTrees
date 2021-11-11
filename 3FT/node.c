@@ -229,7 +229,7 @@ int Node_linkChild(Node_T parent, Node_T child) {
    assert(CheckerDT_Node_isValid(child));
    /* Make sure file does not have child. */
    if (parent->type == FILE) {
-      return PARENT_CHILD_ERROR
+      return PARENT_CHILD_ERROR;
    }
 
    if(Node_hasChild(parent, child->path, NULL)) {
