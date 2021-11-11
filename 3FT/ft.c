@@ -443,7 +443,7 @@ void *FT_getFileContents(char *path){
 */
 void *FT_replaceFileContents(char *path, void *newContents, 
                                 size_t newLength){
-                                    
+
 }
 
 /*
