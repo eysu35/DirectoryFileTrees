@@ -53,14 +53,16 @@ int Node_compare(Node_T node1, Node_T node2);
 const char* Node_getPath(Node_T n);
 
 /*
-  Returns the number of child directories n has.
+  Returns the number of child directories n has. If 
+  node is file, return NOT_A_DIRECTORY.
 */
 size_t Node_getNumChildren(Node_T n);
 
 /*
    Returns 1 if n has a child directory with path,
    0 if it does not have such a child, and -1 if
-   there is an allocation error during search.
+   there is an allocation error during search. Returns
+   NOT_A_DIRECTORY if n is a file node. 
 
    If n does have such a child, and childID is not NULL, store the
    child's identifier in *childID. If n does not have such a child,
