@@ -11,7 +11,7 @@
 #include "a4def.h"
 #include "dynarray.h"
 #include "node.h"
-#include "checkerDT.h"
+#include "../2DT/checkerDT.h"
 
 /*
    A node structure represents a directory in the directory tree
