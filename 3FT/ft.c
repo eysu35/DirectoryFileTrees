@@ -46,7 +46,7 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
             return curr;
         }
         else {
-            return NOT_A_DIRECTORY;
+            return NULL;
         }
     }
     /* Otherwise, if the current path to the node matches the query path to
@@ -277,7 +277,7 @@ boolean FT_containsDir(char *path) {
   Returns NO_SUCH_PATH if curr is not the node for path,
   and SUCCESS otherwise.
  */
-static int FT_rmPathAt(char* path, Node_T curr) {
+static int FT_rmPathAt(const char* path, Node_T curr) {
    Node_T parent;
 
    assert(path != NULL);
