@@ -134,10 +134,16 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     copyPathIndex = copyPath + strlen(dirToken) + 1;
 
     while(dirToken != NULL) {
+        /* About to add the last file node */
         if (type == FT_FILE && copyPathIndex == NULL) {
-            /* logic for adding file*/
+            new = Node_create(path, parent, FT_FILE);
         }
-        new = Node_create(dirToken, curr, DIRECTORY);
+        
+        /* for every other new node in the path, make a
+        new directory node */
+        else{
+            new = Node_create(dirToken, curr, DIRECTORY);
+        }
 
         if(new == NULL) {
             if(firstNew != NULL)
@@ -146,11 +152,16 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
             return MEMORY_ERROR;
         }
 
-        /* what is the point of newCount?????? */
         newCount++;
 
-        if(firstNew == NULL)
+        if(firstNew == NULL){
+            if (type == FT_FILE) {
+                (void) Node_destroy(new);
+                free(copyPath);
+                return CONFLICTING_PATH;
+            }
             firstNew = new;
+        }
         else {
             result = FT_linkParentToChild(curr, new);
             if(result != SUCCESS) {
@@ -163,9 +174,6 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
         curr = new;
         dirToken = strtok(NULL, "/");
         copyPathIndex += strlen(dirToken) + 1;
-
-        /* thoughts: could either do make new node then check if rresult = parent_child_error and check type
-        then destroy the new node and create a new one of type file? */
     }
 
     free(copyPath);
@@ -184,38 +192,6 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
 
         return result;
    }
-}
-
-
-static int FT_insertLastFileNode(char* path, Node_T parent, char* contents){
-    Node_T new;
-    int result;
-
-    assert(path != NULL);
-    assert(parent != NULL);
-
-    new = Node_create(path, parent, FT_FILE);
-    if (new == NULL){
-        Node_destroy(new);
-        return MEMORY_ERROR;
-    }
-
-    result = FT_linkParentToChild(parent, new);
-    if (result != SUCCESS){
-        (void) Node_destroy(new);
-        return result;
-    }
-  
-    count += 1;
-
-    /* allocate memory to store file contents and connect pointer from 
-    new file node to contents */
-    result = Node_updateFileContents(new, contents);
-    if (result != SUCCESS){
-        (void) Node_destroy(new);
-        return result;
-    }
-    return SUCCESS;
 }
 
 /*
@@ -359,16 +335,22 @@ int FT_insertFile(char *path, void *contents, size_t length){
 
     /* set current to last existing node in the path */ 
     curr = FT_getEndOfPathNode(path, root);
+    /* Insert file as node at appropriate location. */
     result = FT_insertRestOfPath(path, curr, FT_FILE);
 
-
-    /* ADD SOMETHING HERE */
-    /*
-    if (result == ????){
-        curr = FT_getEndOfPathNode;
-        result = FT_insertLastFileNode(path, curr, contents)
+    if (result != SUCCESS) {
+        Node_destroy(curr);
+        return result;
     }
-    */ 
+
+    /* Set file contents. */
+    curr = FT_getEndOfPathNode(path, root);
+    result = Node_updateFileContents(curr, contents);
+
+    if (result != SUCCESS) {
+        Node_destroy(curr);
+        return result;
+    }
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
