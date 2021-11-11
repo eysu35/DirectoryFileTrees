@@ -69,12 +69,12 @@ static char* Node_buildPath(Node_T n, const char* dir) {
 Node_T Node_create(const char* dir, Node_T parent, nodeType type){
    Node_T new;
 
-   assert(parent == NULL || CheckerFT_Node_isValid(parent));
+   assert(parent == NULL || CheckerDT_Node_isValid(parent));
    assert(dir != NULL);
 
    new = malloc(sizeof(struct node));
    if(new == NULL) {
-      assert(parent == NULL || CheckerFT_Node_isValid(parent));
+      assert(parent == NULL || CheckerDT_Node_isValid(parent));
       return NULL;
    }
 
@@ -82,7 +82,7 @@ Node_T Node_create(const char* dir, Node_T parent, nodeType type){
 
    if(new->path == NULL) {
       free(new);
-      assert(parent == NULL || CheckerFT_Node_isValid(parent));
+      assert(parent == NULL || CheckerDT_Node_isValid(parent));
       return NULL;
    }
 
@@ -93,12 +93,12 @@ Node_T Node_create(const char* dir, Node_T parent, nodeType type){
    if(new->contents == NULL) {
       free(new->path);
       free(new);
-      assert(parent == NULL || CheckerFT_Node_isValid(parent));
+      assert(parent == NULL || CheckerDT_Node_isValid(parent));
       return NULL;
    }
 
-   assert(parent == NULL || CheckerFT_Node_isValid(parent));
-   assert(CheckerFT_Node_isValid(new));
+   assert(parent == NULL || CheckerDT_Node_isValid(parent));
+   assert(CheckerDT_Node_isValid(new));
    return new;
 }
 
@@ -221,14 +221,14 @@ int Node_updateFileContents(Node_T n, char *contents) {
    size_t i = 0;
 
    assert(n != NULL);
-   assert(checkerFT_Node_isValid(n));
+   assert(CheckerDT_Node_isValid(n));
 
    if (n->type == DIRECTORY) {
       return PARENT_CHILD_ERROR;
    }
 
    if(DynArray_addAt(n->contents, i, contents) == TRUE) {
-      assert(CheckerFT_Node_isValid(n));
+      assert(CheckerDT_Node_isValid(n));
       return SUCCESS;
    }
 }
@@ -248,53 +248,53 @@ int Node_linkChild(Node_T parent, Node_T child) {
 
    assert(parent != NULL);
    assert(child != NULL);
-   assert(CheckerFT_Node_isValid(parent));
-   assert(CheckerFT_Node_isValid(child));
+   assert(CheckerDT_Node_isValid(parent));
+   assert(CheckerDT_Node_isValid(child));
    /* Make sure file does not have child. */
    if (parent->type == FT_FILE) {
       return PARENT_CHILD_ERROR;
    }
 
    if(Node_hasChild(parent, child->path, NULL)) {
-      assert(CheckerFT_Node_isValid(parent));
-      assert(CheckerFT_Node_isValid(child));
+      assert(CheckerDT_Node_isValid(parent));
+      assert(CheckerDT_Node_isValid(child));
       return ALREADY_IN_TREE;
    }
    i = strlen(parent->path);
    if(strncmp(child->path, parent->path, i)) {
-      assert(CheckerFT_Node_isValid(parent));
-      assert(CheckerFT_Node_isValid(child));
+      assert(CheckerDT_Node_isValid(parent));
+      assert(CheckerDT_Node_isValid(child));
       return PARENT_CHILD_ERROR;
    }
    rest = child->path + i;
    if(strlen(child->path) >= i && rest[0] != '/') {
-      assert(CheckerFT_Node_isValid(parent));
-      assert(CheckerFT_Node_isValid(child));
+      assert(CheckerDT_Node_isValid(parent));
+      assert(CheckerDT_Node_isValid(child));
       return PARENT_CHILD_ERROR;
    }
    rest++;
    if(strstr(rest, "/") != NULL) {
-      assert(CheckerFT_Node_isValid(parent));
-      assert(CheckerFT_Node_isValid(child));
+      assert(CheckerDT_Node_isValid(parent));
+      assert(CheckerDT_Node_isValid(child));
       return PARENT_CHILD_ERROR;
    }
    child->parent = parent;
 
    if(DynArray_bsearch(parent->contents, child, &i,
          (int (*)(const void*, const void*)) Node_compare) == 1) {
-      assert(CheckerFT_Node_isValid(parent));
-      assert(CheckerFT_Node_isValid(child));
+      assert(CheckerDT_Node_isValid(parent));
+      assert(CheckerDT_Node_isValid(child));
       return ALREADY_IN_TREE;
    }
 
    if(DynArray_addAt(parent->contents, i, child) == TRUE) {
-      assert(CheckerFT_Node_isValid(parent));
-      assert(CheckerFT_Node_isValid(child));
+      assert(CheckerDT_Node_isValid(parent));
+      assert(CheckerDT_Node_isValid(child));
       return SUCCESS;
    }
    else {
-      assert(CheckerFT_Node_isValid(parent));
-      assert(CheckerFT_Node_isValid(child));
+      assert(CheckerDT_Node_isValid(parent));
+      assert(CheckerDT_Node_isValid(child));
       return PARENT_CHILD_ERROR;
    }
 }
@@ -305,8 +305,8 @@ int  Node_unlinkChild(Node_T parent, Node_T child) {
 
     assert(parent != NULL);
     assert(child != NULL);
-    assert(CheckerFT_Node_isValid(parent));
-    assert(CheckerFT_Node_isValid(child));
+    assert(CheckerDT_Node_isValid(parent));
+    assert(CheckerDT_Node_isValid(child));
 
     /* parent is a file node, return error */
     if (parent->type == FT_FILE){
@@ -315,15 +315,15 @@ int  Node_unlinkChild(Node_T parent, Node_T child) {
 
     if(DynArray_bsearch(parent->contents, child, &i,
             (int (*)(const void*, const void*)) Node_compare) == 0) {
-        assert(CheckerFT_Node_isValid(parent));
-        assert(CheckerFT_Node_isValid(child));
+        assert(CheckerDT_Node_isValid(parent));
+        assert(CheckerDT_Node_isValid(child));
         return PARENT_CHILD_ERROR;
     }
 
     (void) DynArray_removeAt(parent->contents, i);
 
-    assert(CheckerFT_Node_isValid(parent));
-    assert(CheckerFT_Node_isValid(child));
+    assert(CheckerDT_Node_isValid(parent));
+    assert(CheckerDT_Node_isValid(child));
     return SUCCESS;
     }
 
@@ -335,7 +335,7 @@ int Node_addChild(Node_T parent, const char* dir, nodeType type) {
 
     assert(parent != NULL);
     assert(dir != NULL);
-    assert(CheckerFT_Node_isValid(parent));
+    assert(CheckerDT_Node_isValid(parent));
 
     /* if parent is already a file node, return error */
     if (parent->type == FT_FILE){
@@ -343,16 +343,16 @@ int Node_addChild(Node_T parent, const char* dir, nodeType type) {
     }
     new = Node_create(dir, parent, type);
     if(new == NULL) {
-        assert(CheckerFT_Node_isValid(parent));
+        assert(CheckerDT_Node_isValid(parent));
         return PARENT_CHILD_ERROR;
     }
     result = Node_linkChild(parent, new);
     if(result != SUCCESS)
         (void) Node_destroy(new);
     else
-        assert(CheckerFT_Node_isValid(new));
+        assert(CheckerDT_Node_isValid(new));
 
-    assert(CheckerFT_Node_isValid(parent));
+    assert(CheckerDT_Node_isValid(parent));
     return result;
 }
 
