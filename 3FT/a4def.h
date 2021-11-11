@@ -17,4 +17,8 @@ enum { SUCCESS,
 enum bool { FALSE, TRUE };
 typedef enum bool boolean;
 
+/* Declares if Node is a file or directory. */
+enum type { DIRECTORY, FILE };
+typedef enum type nodeType;
+
 #endif
