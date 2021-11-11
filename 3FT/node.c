@@ -25,7 +25,7 @@ struct node {
 
    /* set type to 0 to indicate file node or 1 to
    indicate directory node. */
-   int type;
+   int is_dir;
 
    /* either the children of a directory or the contents
    of a file are stored. Children will be stored in lexicographic 
