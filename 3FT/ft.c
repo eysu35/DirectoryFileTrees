@@ -456,7 +456,7 @@ void *FT_getFileContents(char *path){
     if (Node_getType(curr) == DIRECTORY){
         return NULL;
     }
-    contents = Node_getFileContents(curr);
+    contents = (char*) DynArray_get(Node_getFileContents(curr), 0);
     return contents;
 }
 
@@ -476,7 +476,8 @@ void *FT_replaceFileContents(char *path, void *newContents, size_t newLength) {
     queryNode = FT_getEndOfPathNode(path, root);
     assert(CheckerFT_Node_isValid(queryNode));
 
-    /* Get file contents. */
+    /* Get queryNode's dynArray, update its contents to newContents, and 
+    store the old contents in local variable. */
     oldContents = DynArray_set(Node_getFileContents(queryNode), 0, newContents);
     
     assert(CheckerFT_Node_isValid(queryNode));

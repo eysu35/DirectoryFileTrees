@@ -86,14 +86,15 @@ Node_T Node_getChild(Node_T n, size_t childID);
 */
 Node_T Node_getParent(Node_T n);
 
-/* Updates file node n's contents to contents. */
+/* Updates file node n's contents to contents. A file's contents are
+always stored at index 0 of DynArray. */
 int Node_updateFileContents(Node_T n, char *contents);
 
 /*
-   Returns a char pointer to the contents of a file node, otherwise 
-   returns NULL
+   Returns a DynArray representation of the contents of a file node, 
+   otherwise returns NULL.
 */
-char* Node_getFileContents(Node_T n);
+DynArray_T Node_getFileContents(Node_T n);
 
 
 /*

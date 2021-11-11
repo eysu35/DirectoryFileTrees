@@ -234,11 +234,11 @@ int Node_updateFileContents(Node_T n, char *contents) {
 }
 
 /* see node.h for specification */
-char* Node_getFileContents(Node_T n){
+DynArray_T Node_getFileContents(Node_T n){
    assert(n != NULL);
    assert(n->type == FT_FILE);
 
-   return (char*) n->contents;
+   return n->contents;
 }
 
 /* see node.h for specification */
