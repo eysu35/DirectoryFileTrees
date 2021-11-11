@@ -77,7 +77,7 @@ static Node_T FT_getEndofPathNode(char *path, Node_T curr) {
 
    Otherwise, returns SUCCESS
 */
-static int FT_insertRestOfPath(char* path, Node_T parent) {
+static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     Node_T curr = parent;
     Node_T firstNew = NULL;
     Node_T new;
@@ -113,7 +113,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent) {
     dirToken = strtok(copyPath, "/");
 
     while(dirToken != NULL) {
-        new = Node_create(dirToken, curr, 0);
+        new = Node_create(dirToken, curr, DIRECTORY);
 
         if(new == NULL) {
             if(firstNew != NULL)
@@ -122,6 +122,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent) {
             return MEMORY_ERROR;
         }
 
+        /* what is the point of newCount?????? */
         newCount++;
 
         if(firstNew == NULL)
@@ -137,6 +138,9 @@ static int FT_insertRestOfPath(char* path, Node_T parent) {
         }
         curr = new;
         dirToken = strtok(NULL, "/");
+
+        /* thoughts: could either do make new node then check if rresult = parent_child_error and check type
+        then destroy the new node and create a new one of type file? */
     }
 
     free(copyPath);
@@ -155,6 +159,42 @@ static int FT_insertRestOfPath(char* path, Node_T parent) {
 
         return result;
    }
+}
+
+
+static int FT_insertLastFileNode(char* path, Node_T parent, char* contents){
+    Node_T new;
+    int result;
+    char* pcontents;
+
+    assert(path != NULL);
+    assert(parent != NULL);
+
+    new = Node_create(dirToken, curr, FILE);
+    if (new == NULL){
+        return NULL;
+    }
+
+    result = FT_linkParentToChild(parent, new);
+    if (result != SUCCESS){
+        (void) Node_destroy(new);
+        return result;
+    }
+  
+    count += 1;
+    new->path = path;
+    new->parent = parent;
+    
+    /* allocate memory to store file contents and connect pointer from 
+    new file node to contents */
+    pcontents = malloc(strlen(contents) + 1)
+    if (pcontents == NULL){
+
+        return NULL;
+    }
+    new->contents = pcontents;
+    return SUCCESS;
+
 }
 
 /*
@@ -182,7 +222,7 @@ int FT_insertDir(char *path) {
     curr = FT_getEndOfPathNode(path);
     
     /* Inserts path at the farthest node in the current path. */
-    result = FT_insertRestOfPath(path, curr);
+    result = FT_insertRestOfPath(path, curr, DIRECTORY);
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
 }
@@ -208,6 +248,7 @@ boolean FT_containsDir(char *path) {
     else if(strcmp(path, Node_getPath(curr)))
         result = FALSE;
     else
+        assert(Node_getType(curr) == DIRECTORY);
         result = TRUE;
 
     assert(CheckerFT_isValid(isInitialized,root,count));
@@ -285,13 +326,59 @@ int FT_rmDir(char *path) {
    Returns MEMORY_ERROR if unable to allocate any node or any field.
    Returns PARENT_CHILD_ERROR if a parent cannot link to a new child.
 */
-int FT_insertFile(char *path, void *contents, size_t length);
+int FT_insertFile(char *path, void *contents, size_t length){
+    Node_T curr;
+    int result;
+
+    assert(CheckerFT_isValid(isInitialized, root, count));
+    assert(path != NULL);
+
+    if(!isInitialized)
+        return INITIALIZATION_ERROR;
+
+    /* set current to last existing node in the path */ 
+    curr = FT_getEndOfPathNode;
+    result = FT_insertRestOfPath(path, curr, FILE);
+
+
+    /* ADD SOMETHING HERE */
+    if (result == ????){
+        curr = FT_getEndOfPathNode;
+        result = FT_insertLastFileNode(path, curr, contents)
+    }
+
+    assert(CheckerFT_isValid(isInitialized,root,count));
+    return result;
+}
+
 
 /*
   Returns TRUE if the tree contains the full path parameter as a
   file and FALSE otherwise.
 */
-boolean FT_containsFile(char *path);
+boolean FT_containsFile(char *path){
+    Node_T curr;
+    boolean result;
+
+    assert(CheckerFT_isValid(isInitialized, root, count));
+    assert(path != NULL);
+
+    if (!isInitialized)
+        return FALSE;
+
+    curr = FT_getEndOfPathNode(path);
+    if (curr == NULL)
+        return FALSE;
+    else if (strcmp(path, Node_getPath(curr)))
+        return FALSE;
+    else{
+        assert(Node_getType(curr) = FILE);
+        result = TRUE;
+    }
+
+    assert(CheckerFT_Node_isValid(isInitialized, root, count));
+    return result;
+}
 
 /*
   Removes the FT file at path.
@@ -300,7 +387,31 @@ boolean FT_containsFile(char *path);
   Returns NOT_A_FILE if path exists but is a directory not a file.
   Returns NO_SUCH_PATH if the path does not exist in the hierarchy.
 */
-int FT_rmFile(char *path);
+int FT_rmFile(char *path){
+    Node_T parent;
+    Node_T curr;
+    int result;
+
+    assert(CheckerFT_isValid(isInitialized, root, count));
+    assert(path != NULL);
+
+    if (!isInitialized)
+        return INITIALIZATION_ERROR;
+    
+    curr = FT_getEndOfPathNode;
+    if (curr == NULL)
+        return NO_SUCH_PATH;
+    assert(Node_getType(curr) == FILE);
+
+    parent = Node_getParent(curr);
+    Node_unlinkChild(parent, curr);
+    free(Node_getFileContents(curr));
+    count -= Node_destroy(curr);
+    result = SUCCESS;
+
+    assert(CheckerFT_isValid(isInitialized, root, count));
+    return result;
+}
 
 /*
   Returns the contents of the file at the full path parameter.
@@ -309,7 +420,22 @@ int FT_rmFile(char *path);
   Note: checking for a non-NULL return is not an appropriate
   contains check -- the contents of a file may be NULL.
 */
-void *FT_getFileContents(char *path);
+void *FT_getFileContents(char *path){
+    Node_T curr;
+    char* contents;
+
+    assert(path != NULL);
+    if (!FT_containsFile(path)){
+        return NULL;
+    }
+
+    curr = FT_getEndOfPathNode(path);
+    if (Node_getType(curr) == DIRECTORY){
+        return NULL;
+    }
+    contents = Node_getFileContents(curr)
+    return contents;
+}
 
 /*
   Replaces current contents of the file at the full path parameter with
@@ -317,8 +443,10 @@ void *FT_getFileContents(char *path);
   Returns the old contents if successful. (Note: contents may be NULL.)
   Returns NULL if the path does not already exist or is a directory.
 */
-void *FT_replaceFileContents(char *path, void *newContents,
-                             size_t newLength);
+void *FT_replaceFileContents(char *path, void *newContents, 
+                                size_t newLength){
+                                    
+}
 
 /*
   Returns SUCCESS if path exists in the hierarchy,

@@ -217,6 +217,14 @@ Node_T Node_getParent(Node_T n) {
 }
 
 /* see node.h for specification */
+char* Node_getFileContents(Node_T n){
+   assert(n != NULL);
+   assert(n->type == FILE);
+
+   return n->contents;
+}
+
+/* see node.h for specification */
 int Node_linkChild(Node_T parent, Node_T child) {
    size_t i;
    char* rest;

@@ -82,6 +82,13 @@ Node_T Node_getChild(Node_T n, size_t childID);
 Node_T Node_getParent(Node_T n);
 
 /*
+   Returns a char pointer to the contents of a file node, otherwise 
+   returns NULL
+*/
+char* Node_getFileContents(Node_T n);
+
+
+/*
   Makes child a child of parent, if possible, and returns SUCCESS.
   This is not possible in the following cases:
   * parent already has a child with child's path,
