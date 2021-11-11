@@ -53,6 +53,11 @@ int Node_compare(Node_T node1, Node_T node2);
 const char* Node_getPath(Node_T n);
 
 /*
+   Returns n's type.
+*/
+int Node_getType(Node_T n);
+
+/*
   Returns the number of child directories n has. If 
   node is file, return NOT_A_DIRECTORY.
 */
