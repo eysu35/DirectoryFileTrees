@@ -460,9 +460,7 @@ void *FT_getFileContents(char *path){
   Returns the old contents if successful. (Note: contents may be NULL.)
   Returns NULL if the path does not already exist or is a directory.
 */
-void *FT_replaceFileContents(char *path, void *newContents, size_t newLength){
-    return NULL;
-}
+void *FT_replaceFileContents(char *path, void *newContents, size_t newLength);
 
 /*
   Returns SUCCESS if path exists in the hierarchy,
