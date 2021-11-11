@@ -13,7 +13,7 @@
 #include "dynarray.h"
 #include "ft.h"
 #include "node.h"
-#include "../2DT/checkerDT.h"
+#include "checkerFT.h"
 
 /*
   A File Tree is a representation of a hierarchy of directories and
@@ -393,7 +393,7 @@ boolean FT_containsFile(char *path){
         result = TRUE;
     }
 
-    assert(CheckerFT_Node_isValid(isInitialized, root, count));
+    assert(CheckerFT_isValid(isInitialized, root, count));
     return result;
 }
 
