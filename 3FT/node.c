@@ -39,7 +39,6 @@ struct node {
   returns a path with contents
   n->path/dir
   or NULL if there is an allocation error.
-
   Allocates memory for the returned string,
   which is then owned by the caller!
 */
@@ -128,13 +127,10 @@ size_t Node_destroy(Node_T n) {
 /* see node.h for specification */
 /*char* Node_getPath(Node_T n) {
    char* pathCopy;
-
    assert(n != NULL);
-
    pathCopy = malloc(strlen(n->path)+1);
    if(pathCopy == NULL)
       return NULL;
-
    return strcpy(pathCopy, n->path);
 }
 */
@@ -165,7 +161,7 @@ int Node_compare(Node_T node1, Node_T node2) {
 size_t Node_getNumChildren(Node_T n) {
    assert(n != NULL);
 
-    if (n->type == 0){
+    if (n->type == DIRECTORY){
         return DynArray_getLength(n->contents);
     }
     else{
@@ -183,7 +179,7 @@ int Node_hasChild(Node_T n, const char* path, size_t* childID) {
    assert(n != NULL);
    assert(path != NULL);
 
-   if (n->type == 1){
+   if (n->type == FILE){
        return NULL;
    }
 
@@ -205,7 +201,7 @@ int Node_hasChild(Node_T n, const char* path, size_t* childID) {
 Node_T Node_getChild(Node_T n, size_t childID) {
    assert(n != NULL);
 
-    if (n->type == 0){
+    if (n->type == DIRECTORY){
         if(DynArray_getLength(n->contents) > childID) {
                 return DynArray_get(n->contents, childID);
             }
@@ -290,7 +286,7 @@ int  Node_unlinkChild(Node_T parent, Node_T child) {
     assert(CheckerDT_Node_isValid(child));
 
     /* parent is a file node, return error */
-    if (parent->type == 1){
+    if (parent->type == FILE){
         return PARENT_CHILD_ERROR;
     }
 
@@ -319,7 +315,7 @@ int Node_addChild(Node_T parent, const char* dir, nodeType type) {
     assert(CheckerDT_Node_isValid(parent));
 
     /* if parent is already a file node, return error */
-    if (parent->type == 1){
+    if (parent->type == FILE){
         return PARENT_CHILD_ERROR;
     }
     new = Node_create(dir, parent, type);
