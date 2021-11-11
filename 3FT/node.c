@@ -102,12 +102,6 @@ Node_T Node_create(const char* dir, Node_T parent, int type){
    return new;
 }
 
-int Node_getType(Node_T n) {
-   if (n == NULL) return NULL;
-   
-   return(n->type);
-}
-
 /* see node.h for specification */
 size_t Node_destroy(Node_T n) {
    size_t i;
@@ -150,6 +144,15 @@ const char* Node_getPath(Node_T n) {
 }
 
 /* see node.h for specification */
+
+int Node_getType(Node_T n) {
+   assert(n != NULL);
+   
+   return(n->type);
+}
+
+
+/* see node.h for specification */
 int Node_compare(Node_T node1, Node_T node2) {
    assert(node1 != NULL);
    assert(node2 != NULL);
@@ -161,7 +164,13 @@ int Node_compare(Node_T node1, Node_T node2) {
 size_t Node_getNumChildren(Node_T n) {
    assert(n != NULL);
 
-   return DynArray_getLength(n->contents);
+    if (n->type == 0){
+        return DynArray_getLength(n->contents);
+    }
+    else{
+        return NULL;
+    }
+        
 }
 
 /* see node.h for specification */
@@ -172,6 +181,10 @@ int Node_hasChild(Node_T n, const char* path, size_t* childID) {
 
    assert(n != NULL);
    assert(path != NULL);
+
+   if (n->type == 1){
+       return NULL;
+   }
 
    checker = Node_create(path, NULL, n->type);
    if(checker == NULL) {
@@ -191,13 +204,15 @@ int Node_hasChild(Node_T n, const char* path, size_t* childID) {
 Node_T Node_getChild(Node_T n, size_t childID) {
    assert(n != NULL);
 
-   if(DynArray_getLength(n->contents) > childID) {
-      return DynArray_get(n->contents, childID);
-   }
-   else {
-      return NULL;
-   }
-}
+    if (n->type == 0){
+        if(DynArray_getLength(n->contents) > childID) {
+                return DynArray_get(n->contents, childID);
+            }
+    }
+    else {
+        return NULL;
+    }
+    }
 
 /* see node.h for specification */
 Node_T Node_getParent(Node_T n) {
@@ -215,10 +230,11 @@ int Node_linkChild(Node_T parent, Node_T child) {
    assert(child != NULL);
    assert(CheckerDT_Node_isValid(parent));
    assert(CheckerDT_Node_isValid(child));
-   /* Assert to check a file does not have a
-   file as a child. */
+
+   /* Make sure a file does not have a
+   file or directory as a child. */
    if (parent->type == 1) {
-      assert(child->type != 1);
+      return PARENT_CHILD_ERROR;
    }
 
    if(Node_hasChild(parent, child->path, NULL)) {
@@ -267,50 +283,59 @@ int Node_linkChild(Node_T parent, Node_T child) {
 
 /* see node.h for specification */
 int  Node_unlinkChild(Node_T parent, Node_T child) {
-   size_t i;
+    size_t i;
 
-   assert(parent != NULL);
-   assert(child != NULL);
-   assert(CheckerDT_Node_isValid(parent));
-   assert(CheckerDT_Node_isValid(child));
+    assert(parent != NULL);
+    assert(child != NULL);
+    assert(CheckerDT_Node_isValid(parent));
+    assert(CheckerDT_Node_isValid(child));
 
-   if(DynArray_bsearch(parent->contents, child, &i,
-         (int (*)(const void*, const void*)) Node_compare) == 0) {
-      assert(CheckerDT_Node_isValid(parent));
-      assert(CheckerDT_Node_isValid(child));
-      return PARENT_CHILD_ERROR;
-   }
+    /* parent is a file node, return error */
+    if (parent->type == 1){
+        return PARENT_CHILD_ERROR;
+    }
 
-   (void) DynArray_removeAt(parent->contents, i);
+    if(DynArray_bsearch(parent->contents, child, &i,
+            (int (*)(const void*, const void*)) Node_compare) == 0) {
+        assert(CheckerDT_Node_isValid(parent));
+        assert(CheckerDT_Node_isValid(child));
+        return PARENT_CHILD_ERROR;
+    }
 
-   assert(CheckerDT_Node_isValid(parent));
-   assert(CheckerDT_Node_isValid(child));
-   return SUCCESS;
-}
+    (void) DynArray_removeAt(parent->contents, i);
+
+    assert(CheckerDT_Node_isValid(parent));
+    assert(CheckerDT_Node_isValid(child));
+    return SUCCESS;
+    }
 
 
 /* see node.h for specification */
 int Node_addChild(Node_T parent, const char* dir, int type) {
-   Node_T new;
-   int result;
+    Node_T new;
+    int result;
 
-   assert(parent != NULL);
-   assert(dir != NULL);
-   assert(CheckerDT_Node_isValid(parent));
+    assert(parent != NULL);
+    assert(dir != NULL);
+    assert(CheckerDT_Node_isValid(parent));
 
-   new = Node_create(dir, parent, type);
-   if(new == NULL) {
-      assert(CheckerDT_Node_isValid(parent));
-      return PARENT_CHILD_ERROR;
-   }
-   result = Node_linkChild(parent, new);
-   if(result != SUCCESS)
-      (void) Node_destroy(new);
-   else
-      assert(CheckerDT_Node_isValid(new));
+    /* if parent is already a file node, return error */
+    if (parent->type == 1){
+        return PARENT_CHILD_ERROR;
+    }
+    new = Node_create(dir, parent, type);
+    if(new == NULL) {
+        assert(CheckerDT_Node_isValid(parent));
+        return PARENT_CHILD_ERROR;
+    }
+    result = Node_linkChild(parent, new);
+    if(result != SUCCESS)
+        (void) Node_destroy(new);
+    else
+        assert(CheckerDT_Node_isValid(new));
 
-   assert(CheckerDT_Node_isValid(parent));
-   return result;
+    assert(CheckerDT_Node_isValid(parent));
+    return result;
 }
 
 
