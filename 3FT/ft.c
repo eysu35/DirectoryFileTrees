@@ -443,7 +443,23 @@ void *FT_getFileContents(char *path){
   Returns the old contents if successful. (Note: contents may be NULL.)
   Returns NULL if the path does not already exist or is a directory.
 */
-void *FT_replaceFileContents(char *path, void *newContents, size_t newLength);
+void *FT_replaceFileContents(char *path, void *newContents, size_t newLength) {
+    void *oldContents; 
+    Node_T queryNode;
+
+    assert(path != NULL);
+
+    /* Get File Node. */
+    queryNode = FT_getEndOfPathNode(path, root);
+    assert(CheckerFT_Node_isValid(queryNode));
+
+    /* Get file contents. */
+    oldContents = DynArray_set(Node_getFileContents(queryNode), 0, newContents);
+    
+    assert(CheckerFT_Node_isValid(queryNode));
+
+    return oldContents;
+}
 
 /*
   Returns SUCCESS if path exists in the hierarchy,
