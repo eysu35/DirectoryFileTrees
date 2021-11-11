@@ -180,12 +180,12 @@ int Node_hasChild(Node_T n, const char* path, size_t* childID) {
    assert(path != NULL);
 
    if (n->type == FT_FILE){
-       return -1;
+       return NOT_A_DIRECTORY;
    }
 
    checker = Node_create(path, NULL, n->type);
    if(checker == NULL) {
-      return NOT_A_DIRECTORY;
+      return -1;
    }
    result = DynArray_bsearch(n->contents, checker, &index,
                     (int (*)(const void*, const void*)) Node_compare);
