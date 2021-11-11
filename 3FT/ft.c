@@ -64,6 +64,25 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
 }
 
 /*
+   Given a prospective parent and child node,
+   adds child to parent's children list, if possible
+
+   If not possible, destroys the hierarchy rooted at child
+   and returns PARENT_CHILD_ERROR, otherwise, returns SUCCESS.
+*/
+static int FT_linkParentToChild(Node_T parent, Node_T child) {
+
+   assert(parent != NULL);
+
+   if(Node_linkChild(parent, child) != SUCCESS) {
+      (void) Node_destroy(child);
+      return PARENT_CHILD_ERROR;
+   }
+
+   return SUCCESS;
+}
+
+/*
    Inserts a new path into the tree rooted at parent, or, if
    parent is NULL, as the root of the data structure.
 
