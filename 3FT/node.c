@@ -165,7 +165,7 @@ size_t Node_getNumChildren(Node_T n) {
         return DynArray_getLength(n->contents);
     }
     else{
-        return NULL;
+        return (size_t)(NOT_A_DIRECTORY);
     }
         
 }
@@ -180,12 +180,12 @@ int Node_hasChild(Node_T n, const char* path, size_t* childID) {
    assert(path != NULL);
 
    if (n->type == FT_FILE){
-       return NULL;
+       return -1;
    }
 
    checker = Node_create(path, NULL, n->type);
    if(checker == NULL) {
-      return -1;
+      return NOT_A_DIRECTORY;
    }
    result = DynArray_bsearch(n->contents, checker, &index,
                     (int (*)(const void*, const void*)) Node_compare);
@@ -206,9 +206,7 @@ Node_T Node_getChild(Node_T n, size_t childID) {
                 return DynArray_get(n->contents, childID);
             }
     }
-    else {
-        return NULL;
-    }
+    return NULL;
     }
 
 /* see node.h for specification */
