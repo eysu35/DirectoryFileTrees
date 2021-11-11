@@ -79,7 +79,7 @@ static int FT_linkParentToChild(Node_T parent, Node_T child) {
       return PARENT_CHILD_ERROR;
    }
 
-   return SUCCESS;
+   return (int) SUCCESS;
 }
 
 /*
@@ -184,14 +184,14 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
 static int FT_insertLastFileNode(char* path, Node_T parent, char* contents){
     Node_T new;
     int result;
-    char* pcontents;
 
     assert(path != NULL);
     assert(parent != NULL);
 
     new = Node_create(path, parent, FT_FILE);
     if (new == NULL){
-        return NULL;
+        Node_destroy(new);
+        return MEMORY_ERROR;
     }
 
     result = FT_linkParentToChild(parent, new);
@@ -460,9 +460,8 @@ void *FT_getFileContents(char *path){
   Returns the old contents if successful. (Note: contents may be NULL.)
   Returns NULL if the path does not already exist or is a directory.
 */
-void *FT_replaceFileContents(char *path, void *newContents, 
-                                size_t newLength){
-
+void *FT_replaceFileContents(char *path, void *newContents, size_t newLength){
+    return NULL;
 }
 
 /*
@@ -506,7 +505,7 @@ int FT_destroy(void) {
     assert(CheckerFT_isValid(isInitialized,root,count));
     if(!isInitialized)
         return INITIALIZATION_ERROR;
-    FT_removePathFrom(root);
+    FT_rmPathAt(Node_getPath(root), root);
     root = NULL;
     isInitialized = 0;
     assert(CheckerFT_isValid(isInitialized,root,count));
