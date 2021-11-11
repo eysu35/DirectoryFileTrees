@@ -29,7 +29,7 @@ typedef struct node* Node_T;
    do not point to any children.
 */
 
-Node_T Node_create(const char* dir, Node_T parent, int type);
+Node_T Node_create(const char* dir, Node_T parent, nodeType type);
 
 /*
   Destroys the entire hierarchy of nodes rooted at n,
@@ -111,7 +111,7 @@ int Node_unlinkChild(Node_T parent, Node_T child);
   ALREADY_IN_TREE if parent already has a child with that path
   PARENT_CHILD_ERROR if the new child cannot otherwise be added
 */
-int Node_addChild(Node_T parent, const char* dir);
+int Node_addChild(Node_T parent, const char* dir, nodeType type);
 
 /*
   Returns a string representation for n, 

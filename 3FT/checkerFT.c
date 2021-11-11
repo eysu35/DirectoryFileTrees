@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "dynarray.h"
-#include "checkerDT.h"
+#include "../2DT/checkerDT.h"
 
 
 /* see checkerDT.h for specification */

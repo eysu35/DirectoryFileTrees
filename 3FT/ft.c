@@ -28,6 +28,125 @@ static Node_T root;
 /* a counter of the number of nodes in the hierarchy */
 static size_t count;
 
+
+static Node_T FT_getEndofPathNode(char *path, Node_T curr) {
+    Node_T found;
+    size_t i;
+
+    assert(curr != NULL);
+
+    if(curr == NULL)
+        return NULL;
+
+    else if(!strcmp(path,Node_getPath(curr)))
+        return curr;
+
+    else if(!strncmp(path, Node_getPath(curr), strlen(Node_getPath(curr)))) {
+        for(i = 0; i < Node_getNumChildren(curr); i++) {
+            found = FT_traversePathFrom(path,
+                                    Node_getChild(curr, i));
+            if(found != NULL)
+                return found;
+        }
+        return curr;
+    }
+    return NULL;
+}
+
+/*
+   Inserts a new path into the tree rooted at parent, or, if
+   parent is NULL, as the root of the data structure.
+
+   If a node representing path already exists, returns ALREADY_IN_TREE
+
+   If there is an allocation error in creating any of the new nodes or
+   their fields, returns MEMORY_ERROR
+
+   If there is an error linking any of the new nodes,
+   returns PARENT_CHILD_ERROR
+
+   Otherwise, returns SUCCESS
+*/
+static int FT_insertRestOfPath(char* path, Node_T parent) {
+    Node_T curr = parent;
+    Node_T firstNew = NULL;
+    Node_T new;
+    char* copyPath;
+    char* restPath = path;
+    char* dirToken;
+    int result;
+    size_t newCount = 0;
+
+    assert(path != NULL);
+
+    /* Conditional checks for invariants. If invariant tests pass,
+    increment restPath to point to the end of the current path we're on.
+    For example, if the currPath is 'a/b/c/' and path is 'a/b/c/d/e/', 
+    restPath would now point to d. */
+    if(curr == NULL) {
+        if(root != NULL) {
+            return CONFLICTING_PATH;
+        }
+    }
+    else {
+        if(!strcmp(path, Node_getPath(curr)))
+            return ALREADY_IN_TREE;
+        restPath += (strlen(Node_getPath(curr)) + 1);
+    }
+
+    /* Allocates memory for defensive copy, copies restPath -> 
+    copyPath, and gets first instance of a non-'/' character. */
+    copyPath = malloc(strlen(restPath)+1);
+    if(copyPath == NULL)
+        return MEMORY_ERROR;
+    strcpy(copyPath, restPath);
+    dirToken = strtok(copyPath, "/");
+
+    while(dirToken != NULL) {
+        new = Node_create(dirToken, curr, 0);
+
+        if(new == NULL) {
+            if(firstNew != NULL)
+                (void) Node_destroy(firstNew);
+            free(copyPath);
+            return MEMORY_ERROR;
+        }
+
+        newCount++;
+
+        if(firstNew == NULL)
+            firstNew = new;
+        else {
+            result = FT_linkParentToChild(curr, new);
+            if(result != SUCCESS) {
+                (void) Node_destroy(new);
+                (void) Node_destroy(firstNew);
+                free(copyPath);
+                return result;
+            }
+        }
+        curr = new;
+        dirToken = strtok(NULL, "/");
+    }
+
+    free(copyPath);
+
+    if(parent == NULL) {
+        root = firstNew;
+        count = newCount;
+        return SUCCESS;
+    }
+    else {
+        result = FT_linkParentToChild(parent, firstNew);
+        if(result == SUCCESS)
+            count += newCount;
+        else
+            (void) Node_destroy(firstNew);
+
+        return result;
+   }
+}
+
 /*
    Inserts a new directory into the tree at path, if possible.
    Returns SUCCESS if the new directory is inserted.
@@ -38,7 +157,25 @@ static size_t count;
    Returns MEMORY_ERROR if unable to allocate any node or any field.
    Returns PARENT_CHILD_ERROR if a parent cannot link to a new child.
 */
-int FT_insertDir(char *path);
+int FT_insertDir(char *path) {
+    Node_T curr;
+    int result;
+
+    assert(CheckerFT_isValid(isInitialized,root,count));
+    assert(path != NULL);
+
+    if(!isInitialized)
+        return INITIALIZATION_ERROR;
+    
+    /* Gets node at the end of the query path, so we can insert directory
+    at the end of this path. */
+    curr = FT_getEndOfPathNode(path);
+    
+    /* Inserts path at the farthest node in the current path. */
+    result = FT_insertRestOfPath(path, curr);
+    assert(CheckerFT_isValid(isInitialized,root,count));
+    return result;
+}
 
 /*
   Returns TRUE if the tree contains the full path parameter as a
