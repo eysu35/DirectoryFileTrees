@@ -103,6 +103,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     char* copyPath;
     char* restPath = path;
     char* dirToken;
+    char* copyPathIndex;
     int result;
     size_t newCount = 0;
 
@@ -130,8 +131,12 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
         return MEMORY_ERROR;
     strcpy(copyPath, restPath);
     dirToken = strtok(copyPath, "/");
+    copyPathIndex = copyPath + strlen(dirToken) + 1;
 
     while(dirToken != NULL) {
+        if (type == FT_FILE && copyPathIndex == NULL) {
+            /* logic for adding file*/
+        }
         new = Node_create(dirToken, curr, DIRECTORY);
 
         if(new == NULL) {
@@ -157,6 +162,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
         }
         curr = new;
         dirToken = strtok(NULL, "/");
+        copyPathIndex += strlen(dirToken) + 1;
 
         /* thoughts: could either do make new node then check if rresult = parent_child_error and check type
         then destroy the new node and create a new one of type file? */
