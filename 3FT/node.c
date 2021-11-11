@@ -230,7 +230,7 @@ int Node_updateFileContents(Node_T n, char *contents) {
       assert(CheckerDT_Node_isValid(n));
       return SUCCESS;
    }
-   return NULL;
+   return (int) NULL;
 }
 
 /* see node.h for specification */
