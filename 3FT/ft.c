@@ -340,7 +340,16 @@ int FT_stat(char *path, boolean *type, size_t *length);
   Returns INITIALIZATION_ERROR if already initialized,
   and SUCCESS otherwise.
 */
-int FT_init(void);
+int FT_init(void) {
+    assert(CheckerDT_isValid(isInitialized,root,count));
+    if(isInitialized)
+        return INITIALIZATION_ERROR;
+    isInitialized = 1;
+    root = NULL;
+    count = 0;
+    assert(CheckerDT_isValid(isInitialized,root,count));
+    return SUCCESS;
+}
 
 /*
   Removes all contents of the data structure and
