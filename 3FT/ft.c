@@ -587,7 +587,6 @@ void *FT_replaceFileContents(char *path, void *newContents, size_t newLength) {
 int FT_stat(char *path, boolean *type, size_t *length) {
     Node_T queryNode;
     DynArray_T temp;
-    char *fileContents;
 
     assert(path != NULL);
     if (!isInitialized) {
@@ -604,8 +603,6 @@ int FT_stat(char *path, boolean *type, size_t *length) {
     /* IF A FILE, store type and file contents and return SUCCESS. */
     if (FT_getFileNode(path) != NULL) {
         queryNode = FT_getFileNode(path);
-        temp = Node_getFileContents(queryNode);
-        fileContents = (char*)DynArray_get(temp, 0);
         *type = TRUE;
         /* add 1 for the null char at the end */
         *length = Node_getLength(queryNode);
