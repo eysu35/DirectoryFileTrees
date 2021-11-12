@@ -58,6 +58,11 @@ const char* Node_getPath(Node_T n);
 int Node_getType(Node_T n);
 
 /*
+   Returns n's length (of contents of file node).
+*/
+size_t Node_getLength(Node_T n);
+
+/*
   Returns the number of child directories n has. If 
   node is file, return NOT_A_DIRECTORY.
 */

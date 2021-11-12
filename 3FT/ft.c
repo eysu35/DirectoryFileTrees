@@ -574,7 +574,7 @@ void *FT_replaceFileContents(char *path, void *newContents, size_t newLength) {
 
     /* Get queryNode's dynArray, update its contents to newContents, and 
     store the old contents in local variable. */ 
-    Node_updateFileContents(queryNode, newContents);
+    oldContents = Node_updateFileContents(queryNode, newContents);
     Node_updateLength(queryNode, newLength);
 
     return oldContents;

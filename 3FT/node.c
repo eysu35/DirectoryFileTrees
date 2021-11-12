@@ -156,6 +156,13 @@ int Node_getType(Node_T n) {
    return(n->type);
 }
 
+/* see node.h for specification */
+size_t Node_getLength(Node_T n) {
+   assert(n != NULL);
+   
+   return(n->length);
+}
+
 
 /* see node.h for specification */
 int Node_compare(Node_T node1, Node_T node2) {
@@ -224,10 +231,23 @@ Node_T Node_getParent(Node_T n) {
    return n->parent;
 }
 
+
+int Node_setFileContents(Node_T n, void *contents){
+   int i = 0;
+   int result;
+
+   assert(n != NULL)
+   assert(CheckerFT_Node_isValid(n));
+
+   if (DynArray_addAt(n, i, contents) == 1)
+      result = SUCCESS;
+
+   return RESULT;
+}
+
 /* For Node_T n, updates n's old contents to contents. */
 void* Node_updateFileContents(Node_T n, void *contents) {
    size_t i = 0;
-   int check;
    void *old_contents;
 
    assert(n != NULL);
@@ -235,11 +255,6 @@ void* Node_updateFileContents(Node_T n, void *contents) {
 
    if (n->type == DIRECTORY) {
       return NULL;
-   }
-   if (DynArray_getLength(n->contents) < i){
-      check = DynArray_grow(n->contents);
-      if (check == 0)
-         return NULL;
    }
    old_contents = DynArray_set(n->contents, i, contents);
    assert(CheckerFT_Node_isValid(n));
