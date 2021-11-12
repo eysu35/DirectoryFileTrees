@@ -96,7 +96,7 @@ Node_T Node_create(const char* dir, Node_T parent, nodeType type){
    new->parent = parent;
    new->length = (size_t)NULL;
    /* initialize DynArray size to 1 to be able to store file contents */
-   new->contents = DynArray_new(1);
+   new->contents = DynArray_new(0);
    if(new->contents == NULL) {
       free(new->path);
       free(new);
