@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
 /* ft.h                                                               */
-/* Author: Christopher Moretti and Vikash Modi '23                    */
+/* Author: Michael Garcia and Ellen Su                                */
 /*--------------------------------------------------------------------*/
 
 #ifndef FT_INCLUDED

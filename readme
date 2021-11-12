@@ -92,7 +92,7 @@ learning and was not the most fun assignment.
 Student 2: What is your assessment of the assignment? Was it helpful?
 Was it fun?
 
-I found it somewhat interesting, but overwhelmingly tedious and vague. 
+I found it somewhat interesting, but very tedious and vague. 
 In the early stages, we found it difficult to progress as the 
 assignment instructions were opaque and confusing, leaving us unsure 
 what the assignment exactly was. A clear example of this is the FT_stat()
@@ -102,13 +102,11 @@ process, since instructions and information was so vague, we spent the
 vast majority of our time debugging our program, using the exact same 
 debugging tools as in prior assignments (primarily with gdb). Since we 
 already had plenty of experience with this from past assignmnets, this felt 
-unnecesarily tedious and did not deepen my understanding of course 
-content in a new or meaningful way. 
+unnecesarily tedious.
 
 The one aspect I did like about this assignment was working with multiple
 files and working with "others code"... however providing clearer 
-instructions and information would accomplish the same goal without 
-inflicting unecessary stress and time on students.
+instructions and information would accomplish the same goal.
 
 ------------------------------------------------------------------------
 (optional) What information can you provide about your submission that
