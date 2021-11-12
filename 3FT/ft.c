@@ -586,7 +586,6 @@ void *FT_replaceFileContents(char *path, void *newContents, size_t newLength) {
  */
 int FT_stat(char *path, boolean *type, size_t *length) {
     Node_T queryNode;
-    DynArray_T temp;
 
     assert(path != NULL);
     if (!isInitialized) {
