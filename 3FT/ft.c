@@ -493,10 +493,9 @@ int FT_rmFile(char *path){
     if (!isInitialized)
         return INITIALIZATION_ERROR;
     
-    curr = FT_getEndOfPathNode(path, root);
-    if (curr == NULL)
+    curr = FT_getFileNode(path);
+    if (curr == NULL || Node_getPath(curr) != path)
         return NO_SUCH_PATH;
-    assert(Node_getType(curr) == FT_FILE);
 
     parent = Node_getParent(curr);
     Node_unlinkChild(parent, curr);
