@@ -143,6 +143,10 @@ which we promise is itself correct:
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
+1) DT_traversePathFrom is poorly named. It does not specify what it is 
+traversing the path for (the last existing node in the path).
 
+2) DT_traversePath is a useless function. All it does is call
+DT_traversePAth
 
 ------------------------------------------------------------------------

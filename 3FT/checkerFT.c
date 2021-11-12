@@ -25,13 +25,40 @@ boolean CheckerFT_Node_isValid(Node_T n) {
       return FALSE;
    }
 
+   /* Check that type is either file or directory. */
+   if (Node_getType(n) != 0 && Node_getType(n) != 1) {
+         fprintf(stderr, "Node's type is not valid.");
+         return FALSE;
+   }
+
+   /********** DIR CHECKS ****************/
+   if (Node_getType(n) == 1){
+      
+   }
+
+   /********** FILE CHECKS ****************/
+   if (Node_getType(n) == 1){
+      /* check that actual length of file contents matches node's 
+      length field */
+      if (DynArray_getLength(Node_getFileContents(n) != Node_getLength(n))){
+         fprintf(stderr, "Length of node's contents do not match node->length");
+         return FALSE;
+      }
+   }
+
+
+
+
+
    parent = Node_getParent(n);
    if(parent != NULL) {
       npath = Node_getPath(n);
 
+      /********** PATH CHECKS ****************/
+
       /* Sample check that parent's path must be prefix of n's path */
       ppath = Node_getPath(parent);
-      /* Then, checks that parent's path is not null. */
+      /* Checks that parent's path is not null. */
       if(ppath == NULL) {
          fprintf(stderr, "P has NULL path\n");
          return FALSE;
@@ -50,13 +77,10 @@ boolean CheckerFT_Node_isValid(Node_T n) {
          return FALSE;
       }
 
-      /* Check that type is valid. */
-      if (Node_getType(n) != 0 && Node_getType(n) != 1) {
-          fprintf(stderr, "Node's type is not valid.");
-          return FALSE;
-      }
+      /********** CHILD CHECKS ****************/
 
-      /* Check that children nodes are in sorted order */
+      /* Check that children nodes of dir node are in sorted order */
+      /* if file node, num_children = 1 so will skip this loop */
       num_children = Node_getNumChildren(parent);
       if (num_children > 1){
          for (i = 0; i < num_children - 1; i++){
@@ -76,6 +100,7 @@ boolean CheckerFT_Node_isValid(Node_T n) {
             }
          }
       }
+
    }
    return TRUE;
 }
