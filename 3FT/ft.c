@@ -246,17 +246,15 @@ boolean FT_containsDir(char *path) {
         return FALSE;
     }
     curr = FT_getEndOfPathNode(path, root);
-
-    if (Node_getType(curr) == FT_FILE)
-        return FALSE;
         
     if(curr == NULL)
         result = FALSE;
     else if(strcmp(path, Node_getPath(curr)))
         result = FALSE;
-    else
+    else {
         assert(Node_getType(curr) == DIRECTORY);
         result = TRUE;
+    }
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
