@@ -60,7 +60,9 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
             if(found != NULL)
                 return found;
         }
-        return curr;
+        if (Node_getType(curr) == DIRECTORY){
+            return curr;
+        }
     }
     return NULL;
 }
