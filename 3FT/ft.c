@@ -105,7 +105,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     char* copyPath;
     char* restPath = path;
     char* dirToken;
-    char* copyPathIndex;
+    int* restPathCount;
     int result;
     size_t newCount = 0;
 
@@ -134,11 +134,12 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
         return MEMORY_ERROR;
     strcpy(copyPath, restPath);
     dirToken = strtok(copyPath, "/");
-    copyPathIndex = copyPath + strlen(dirToken) + 1;
+    restPathCount = (strlen(copyPath) + 1)/2;
 
     while(dirToken != NULL) {
+        restPathCount -= strlen(dirToken);
         /* About to add the last file node */
-        if (type == FT_FILE && copyPathIndex == NULL) {
+        if (type == FT_FILE && restPathCount == 0) {
             new = Node_create(path, parent, FT_FILE);
         }
         
