@@ -414,19 +414,6 @@ int FT_insertFile(char *path, void *contents, size_t length){
     /* set current to last existing node in the path */ 
     curr = FT_getEndOfPathNode(path, root);
 
-    /* manipulate path so it is a prefix up to the first file instance. 
-    fileNode = FT_getFileNode(path);
-
-    pathCopy = NULL;
-    if (fileNode != NULL) {
-        pathCopy = (char*)Node_getPath(fileNode);
-         strcpy(pathCopy, Node_getPath(fileNode)); 
-        if (FT_containsFile(pathCopy)) {
-            return NOT_A_DIRECTORY;
-        }
-    } */
-
-
     if (FT_getFileNode(path)!= NULL){
         return NOT_A_DIRECTORY;
     }
