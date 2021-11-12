@@ -114,7 +114,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     For example, if the currPath is 'a/b/c/' and path is 'a/b/c/d/e/', 
     restPath would now point to d. */
     if (root == NULL){
-        if (type = FT_FILE){
+        if (type == FT_FILE){
             return NOT_A_DIRECTORY;
         }
     }
