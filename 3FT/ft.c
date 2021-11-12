@@ -84,7 +84,7 @@ static Node_T FT_getFileNode(char *path) {
         if (child == NULL) {
             return NULL;
         }
-        if (!strcmp(Node_getPath(child), path)){
+        if(!strncmp(Node_getPath(child), path, strlen(Node_getPath(child)))){
             fileNode = Node_getChild(parent, i);
             return fileNode;
         }
