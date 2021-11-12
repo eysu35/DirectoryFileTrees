@@ -600,8 +600,8 @@ int FT_stat(char *path, boolean *type, size_t *length) {
         queryNode = FT_getFileNode(path);
         temp = Node_getFileContents(queryNode);
         fileContents = (char*)DynArray_get(temp, 0);
-        type = (boolean*)TRUE;
-        length = (size_t*)strlen(fileContents);
+        *type = (boolean*)TRUE;
+        *length = (size_t*)strlen(fileContents);
     }
     else {
         type = (boolean*)FALSE;
