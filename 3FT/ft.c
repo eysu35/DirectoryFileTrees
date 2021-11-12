@@ -68,6 +68,7 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
 /* Returns file node at given path, or NULL if it does not exist. */
 static Node_T FT_getFileNode(char *path) {
     Node_T fileNode;
+    Node_T child;
     Node_T parent;
     size_t i;
 
@@ -79,7 +80,11 @@ static Node_T FT_getFileNode(char *path) {
     }
 
     for (i = 0; i < Node_getNumChildren(parent); i++) {
-        if (!strcmp(Node_getPath(Node_getChild(parent, i)), path)){
+        child = Node_getChild(parent, i);
+        if (child == NULL) {
+            return NULL;
+        }
+        if (!strcmp(Node_getPath(child), path)){
             fileNode = Node_getChild(parent, i);
             return fileNode;
         }
