@@ -554,7 +554,7 @@ void *FT_replaceFileContents(char *path, void *newContents, size_t newLength) {
     assert(path != NULL);
 
     /* Get File Node. */
-    queryNode = FT_getEndOfPathNode(path, root);
+    queryNode = FT_getFileNode(path);
     assert(CheckerFT_Node_isValid(queryNode));
 
     /* Get queryNode's dynArray, update its contents to newContents, and 
