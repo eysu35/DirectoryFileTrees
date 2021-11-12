@@ -147,8 +147,9 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     size_t newCount = 0;
 
     assert(path != NULL);
+    assert(CheckerFT_isValid(isInitialized, root, count));
 
-    /* Conditional checks for invariants. */
+    /* Invariant check. */
     if(curr == NULL) {
         if(root != NULL) {
             return CONFLICTING_PATH;
@@ -222,6 +223,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     if(parent == NULL) {
         root = firstNew;
         count = newCount;
+        assert(CheckerFT_isValid(isInitialized, root, count));
         return SUCCESS;
     }
     else {
@@ -230,7 +232,6 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
             count += newCount;
         else
             (void) Node_destroy(firstNew);
-
         return result;
    }
 }
@@ -254,6 +255,7 @@ int FT_insertDir(char *path) {
     assert(CheckerFT_isValid(isInitialized,root,count));
     assert(path != NULL);
 
+    /* Invariant check. */
     if(!isInitialized)
         return INITIALIZATION_ERROR;
     
@@ -295,13 +297,17 @@ boolean FT_containsDir(char *path) {
     assert(CheckerFT_isValid(isInitialized,root,count));
     assert(path != NULL);
 
+    /* Invariant check. */
     if(!isInitialized)
         return FALSE;
 
-    /* if tree initialized but null root */
     if (root == NULL){
         return FALSE;
     }
+
+    /* Get directory node at path. If FT contains
+    the directory, then the path of this node 
+    will match the input path. */
     curr = FT_getEndOfPathNode(path, root);
         
     if(curr == NULL)
