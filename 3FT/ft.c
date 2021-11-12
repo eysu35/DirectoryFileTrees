@@ -530,7 +530,7 @@ int FT_rmFile(char *path){
 void *FT_getFileContents(char *path){
     Node_T curr;
     DynArray_T temp;
-    char* contents;
+    void* contents;
 
     assert(path != NULL);
     if (!FT_containsFile(path)){
@@ -545,7 +545,7 @@ void *FT_getFileContents(char *path){
     if (temp == NULL) {
         return NULL;
     }
-    contents = (char*) DynArray_get(temp, 0);
+    contents = (void*) DynArray_get(temp, 0);
     return contents;
 }
 
@@ -663,7 +663,7 @@ static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) {
    assert(d != NULL);
 
    if(n != NULL) {
-      (void) DynArray_set(d, i, Node_getPath(n));
+      (void*) DynArray_set(d, i, Node_getPath(n));
       i++;
       for(c = 0; c < Node_getNumChildren(n); c++)
          i = FT_preOrderTraversal(Node_getChild(n, c), d, i);
