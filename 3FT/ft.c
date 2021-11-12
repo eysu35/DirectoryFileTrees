@@ -33,10 +33,10 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
     Node_T found;
     size_t i;
 
-    assert(curr != NULL);
+    assert(path != NULL);
 
     if(curr == NULL)
-        return NULL;
+        return CONFLICTING_PATH;
 
     /* If query path and path to current node are equivalent (and the current
     node is a directory), return the currrent node. If they match and
