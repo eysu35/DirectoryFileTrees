@@ -133,8 +133,8 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     if(copyPath == NULL)
         return MEMORY_ERROR;
     strcpy(copyPath, restPath);
-    dirToken = strtok(copyPath, "/");
     restPathCount = (int*)((strlen(copyPath) + 1)/2);
+    dirToken = strtok(copyPath, "/");
 
     while(dirToken != NULL) {
         restPathCount -= strlen(dirToken);
