@@ -648,7 +648,7 @@ int FT_stat(char *path, boolean *type, size_t *length) {
     Node_T queryNode;
 
     assert(path != NULL);
-    assert(type == 0 || type == 1);
+    assert(type == TRUE || type == FALSE);
     assert(length != NULL);
     
     /* Invariant check. */
