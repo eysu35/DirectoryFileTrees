@@ -485,7 +485,7 @@ int FT_stat(char *path, boolean *type, size_t *length) {
 
     assert(path != NULL);
     if (type) {
-        assert((boolean*)type == FALSE || type == 1);
+        assert((boolean*)type == FALSE || (boolean*)type == TRUE);
     }
     if (!isInitialized) {
         return INITIALIZATION_ERROR;
@@ -499,7 +499,7 @@ int FT_stat(char *path, boolean *type, size_t *length) {
     }
 
     /* Verify type and length of content matches (if a file). */
-    if (type == 1) {
+    if ((boolean*)type == TRUE) {
         if (Node_getType(queryNode) != FT_FILE) {
             return NO_SUCH_PATH;
         }
