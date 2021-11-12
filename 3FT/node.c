@@ -94,9 +94,9 @@ Node_T Node_create(const char* dir, Node_T parent, nodeType type){
    new->type = type;
 
    new->parent = parent;
-   new->length = (size_t)NULL;
+   new->length = (size_t)0;
    /* initialize DynArray size to 1 to be able to store file contents */
-   new->contents = DynArray_new(1);
+   new->contents = DynArray_new(0);
    if(new->contents == NULL) {
       free(new->path);
       free(new);
@@ -154,6 +154,13 @@ int Node_getType(Node_T n) {
    assert(n != NULL);
    
    return(n->type);
+}
+
+/* see node.h for specification */
+size_t Node_getLength(Node_T n) {
+   assert(n != NULL);
+   
+   return(n->length);
 }
 
 
@@ -223,6 +230,7 @@ Node_T Node_getParent(Node_T n) {
 
    return n->parent;
 }
+
 
 /* For Node_T n, updates n's old contents to contents. */
 void* Node_updateFileContents(Node_T n, void *contents) {
