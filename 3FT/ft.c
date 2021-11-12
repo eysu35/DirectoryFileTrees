@@ -28,14 +28,18 @@ static Node_T root;
 /* a counter of the number of nodes in the hierarchy */
 static size_t count;
 
-
+/* 
+    Returns directory node at the farthest end of the input path and
+    curr Node, or NULL if no node exists at this path. 
+*/
 static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
     Node_T found;
     size_t i;
 
     assert(path != NULL);
+    assert(curr != NULL);
 
-    /* if root is null, then return null */
+    /* If root is NULL, then return NULL. */
     if (curr == NULL){
         return NULL;
     }
