@@ -362,7 +362,7 @@ int FT_insertFile(char *path, void *contents, size_t length){
     /* Set file contents. */
     curr = FT_getEndOfPathNode(path, root);
     for (i = 0; i < Node_getNumChildren(curr); i++) {
-        if (strcmp(Node_getPath(Node_getChild(curr, i)), path)){
+        if (!strcmp(Node_getPath(Node_getChild(curr, i)), path)){
             curr = Node_getChild(curr, i);
             break;
         }
