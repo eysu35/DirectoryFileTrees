@@ -240,6 +240,10 @@ int FT_insertDir(char *path) {
     if(!isInitialized)
         return INITIALIZATION_ERROR;
     
+    if (FT_containsFile(path) || FT_containsDir(path)) {
+        return ALREADY_IN_TREE;
+    }
+
     /* Gets node at the end of the query path, so we can insert directory
     at the end of this path. */
     curr = FT_getEndOfPathNode(path, root);
