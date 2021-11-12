@@ -237,6 +237,38 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
 }
 
 /*
+  Removes the directory hierarchy rooted at path starting from
+  curr. If curr is the data structure's root, root becomes NULL.
+
+  Returns NO_SUCH_PATH if curr is not the node for path,
+  and SUCCESS otherwise.
+ */
+static int FT_rmPathAt(const char* path, Node_T curr) {
+   Node_T parent;
+
+   assert(path != NULL);
+   assert(curr != NULL);
+
+   parent = Node_getParent(curr);
+
+   if(!strcmp(path,Node_getPath(curr))) {
+        if(parent == NULL)
+            root = NULL;
+        else
+            Node_unlinkChild(parent, curr);
+
+        /* Taken from DT_removePathFrom. */
+        if(curr != NULL) {
+            count -= Node_destroy(curr);
+        }
+      return SUCCESS;
+   }
+   else
+      return NO_SUCH_PATH;
+
+}
+
+/*
    Inserts a new directory into the tree at path, if possible.
    Returns SUCCESS if the new directory is inserted.
    Returns INITIALIZATION_ERROR if not in an initialized state.
@@ -324,38 +356,6 @@ boolean FT_containsDir(char *path) {
 }
 
 /*
-  Removes the directory hierarchy rooted at path starting from
-  curr. If curr is the data structure's root, root becomes NULL.
-
-  Returns NO_SUCH_PATH if curr is not the node for path,
-  and SUCCESS otherwise.
- */
-static int FT_rmPathAt(const char* path, Node_T curr) {
-   Node_T parent;
-
-   assert(path != NULL);
-   assert(curr != NULL);
-
-   parent = Node_getParent(curr);
-
-   if(!strcmp(path,Node_getPath(curr))) {
-        if(parent == NULL)
-            root = NULL;
-        else
-            Node_unlinkChild(parent, curr);
-
-        /* Taken from DT_removePathFrom. */
-        if(curr != NULL) {
-            count -= Node_destroy(curr);
-        }
-      return SUCCESS;
-   }
-   else
-      return NO_SUCH_PATH;
-
-}
-
-/*
   Removes the FT hierarchy rooted at the directory path.
   Returns SUCCESS if found and removed.
   Returns INITIALIZATION_ERROR if not in an initialized state.
@@ -374,6 +374,9 @@ int FT_rmDir(char *path) {
     if(!isInitialized)
         return INITIALIZATION_ERROR;
 
+    /* Get directory node at given path and remove
+    that node, return NO_SUCH_PATH if directory node does 
+    not exists at given path. */
     curr = FT_getEndOfPathNode(path, root);
     if(curr == NULL)
         result =  NO_SUCH_PATH;
@@ -382,14 +385,12 @@ int FT_rmDir(char *path) {
 
     /* manipulate path so it is a prefix up to the first file instance. */
     fileNode = FT_getFileNode(path);
-    pathCopy = NULL;
     if (fileNode != NULL) {
-        pathCopy = (char*)Node_getPath(fileNode);
-        /* strcpy(pathCopy, Node_getPath(fileNode)); */
-        if (FT_containsFile(pathCopy)) {
+        /* pathCopy = (char*)Node_getPath(fileNode);
+        if (FT_containsFile(pathCopy))* {*/
             return NOT_A_DIRECTORY;
-        }
     }
+   /* }*/
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
