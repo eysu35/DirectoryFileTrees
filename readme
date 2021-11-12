@@ -197,7 +197,42 @@ your disagreements with them? Copy the critTer warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-NODE: FT.C
+ft.c:
+
+Warning #1: 
+ft.c: line 746: low priority: 
+A file should contain no more than 15 functions;
+this file contains 20 functions
+
+We partially agree with this warning for modularity and stylistic reasons,
+but we ultimately disagree from a functional perspective. Having a lot 
+of static helper functions is what makes the function so large and, if
+we had more time, we would likely try to refactor so the helper functions
+can reside in a separate helper file. However, all of these functions 
+are necessary for the function to operate correctly, so thus we disagree.
+
+
+# Warning #2: 
+ft.c: line 453: medium priority:
+Do you want to validate 'contents' through an assert?
+
+We disagree. Contents can have a null value (or any value), so
+there's no need to check its value. 
+
+
+# Warning #3:
+ft.c: line 616: medium priority:
+Do you want to validate 'newContents' through an assert?
+
+We disagree - same reasoning as Warning #2.
+
+
+# Warning #4:
+ft.c: line 745: low priority: 
+A source code file should contain fewer than 500 lines;
+this file contains 746 lines
+
+We disagree - same reasoning as Warning #1. 
 
 ------------------------------------------------------------------------
 For each of the first three faulty BDT implementations required by Step
