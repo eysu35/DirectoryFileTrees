@@ -259,7 +259,7 @@ int FT_insertDir(char *path) {
     fileNode = FT_getFileNode(path);
     pathCopy = NULL;
     if (fileNode != NULL) {
-        pathCopy = Node_getPath(fileNode);
+        pathCopy = (char*)Node_getPath(fileNode);
         /* strcpy(pathCopy, Node_getPath(fileNode)); */
         if (FT_containsFile(pathCopy)) {
             return NOT_A_DIRECTORY;
@@ -366,7 +366,7 @@ int FT_rmDir(char *path) {
     fileNode = FT_getFileNode(path);
     pathCopy = NULL;
     if (fileNode != NULL) {
-        pathCopy = Node_getPath(fileNode);
+        pathCopy = (char*)Node_getPath(fileNode);
         /* strcpy(pathCopy, Node_getPath(fileNode)); */
         if (FT_containsFile(pathCopy)) {
             return NOT_A_DIRECTORY;
@@ -417,7 +417,7 @@ int FT_insertFile(char *path, void *contents, size_t length){
     fileNode = FT_getFileNode(path);
     pathCopy = NULL;
     if (fileNode != NULL) {
-        pathCopy = Node_getPath(fileNode);
+        pathCopy = (char*)Node_getPath(fileNode);
         /* strcpy(pathCopy, Node_getPath(fileNode)); */
         if (FT_containsFile(pathCopy)) {
             return NOT_A_DIRECTORY;
