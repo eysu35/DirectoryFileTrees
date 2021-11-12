@@ -319,10 +319,15 @@ int FT_rmDir(char *path) {
     return result;
 }
 
-/* Retrieves file node at given path at given directory node. */
-static Node_T FT_getFileNode(char *path, Node_T parent) {
+/* Returns file node at given path, or NULL if it does not exist. */
+static Node_T FT_getFileNode(char *path) {
     Node_T fileNode;
+    Node_T parent;
     size_t i;
+
+    assert(path != NULL);
+
+    parent = FT_getEndOfPathNode(path, root);
 
     for (i = 0; i < Node_getNumChildren(parent); i++) {
         if (!strcmp(Node_getPath(Node_getChild(parent, i)), path)){
@@ -347,7 +352,6 @@ static Node_T FT_getFileNode(char *path, Node_T parent) {
 */
 int FT_insertFile(char *path, void *contents, size_t length){
     Node_T curr;
-    size_t i;
     int result;
 
     assert(CheckerFT_isValid(isInitialized, root, count));
@@ -372,8 +376,7 @@ int FT_insertFile(char *path, void *contents, size_t length){
     }
 
     /* Set file contents. */
-    curr = FT_getEndOfPathNode(path, root);
-    curr = FT_getFileNode(path, curr);
+    curr = FT_getFileNode(path);
     result = Node_updateFileContents(curr, contents);
 
     if (result != SUCCESS) {
@@ -400,16 +403,15 @@ boolean FT_containsFile(char *path){
     if (!isInitialized)
         return FALSE;
 
-    curr = FT_getEndOfPathNode(path, root);
-
-    if (Node_getType(curr) == DIRECTORY)
-        return FALSE;
+    curr = FT_getFileNode(path);
 
     if (curr == NULL)
         return FALSE;
+    if (Node_getType(curr) == DIRECTORY)
+        return FALSE;
     else if (strcmp(path, Node_getPath(curr)))
         return FALSE;
-    else{
+    else {
         result = TRUE;
     }
 
