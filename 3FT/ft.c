@@ -122,8 +122,9 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
         }
     }
     else {
-        if(!strcmp(path, Node_getPath(curr)))
+        if(!strcmp(path, Node_getPath(curr))) {
             return ALREADY_IN_TREE;
+        }
         restPath += (strlen(Node_getPath(curr)) + 1);
     }
 
