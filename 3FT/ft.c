@@ -247,6 +247,9 @@ boolean FT_containsDir(char *path) {
     }
     curr = FT_getEndOfPathNode(path, root);
 
+    if (Node_getType(curr) == FT_FILE)
+        return FALSE;
+        
     if(curr == NULL)
         result = FALSE;
     else if(strcmp(path, Node_getPath(curr)))
@@ -384,12 +387,15 @@ boolean FT_containsFile(char *path){
         return FALSE;
 
     curr = FT_getEndOfPathNode(path, root);
+
+    if (Node_getType(curr) == DIRECTORY)
+        return FALSE;
+
     if (curr == NULL)
         return FALSE;
     else if (strcmp(path, Node_getPath(curr)))
         return FALSE;
     else{
-        assert(Node_getType(curr) == FT_FILE);
         result = TRUE;
     }
 
