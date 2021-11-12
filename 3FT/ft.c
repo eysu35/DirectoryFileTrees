@@ -437,7 +437,7 @@ int FT_insertFile(char *path, void *contents, size_t length){
     The second is acceptable. */
     curr = FT_getFileNode(path);
     assert(curr != NULL);
-    assert(curr->type == FT_FILE);
+    assert(Node_getType(curr) == FT_FILE);
 
     Node_updateFileContents(curr, contents);
     Node_updateLength(curr, length);
