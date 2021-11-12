@@ -485,7 +485,7 @@ int FT_stat(char *path, boolean *type, size_t *length) {
 
     assert(path != NULL);
     if (type) {
-        assert(type == FALSE || type == TRUE);
+        assert(type == 0 || type == 1);
     }
     if (!isInitialized) {
         return INITIALIZATION_ERROR;
@@ -499,12 +499,12 @@ int FT_stat(char *path, boolean *type, size_t *length) {
     }
 
     /* Verify type and length of content matches (if a file). */
-    if (type == TRUE) {
+    if (type == 1) {
         if (Node_getType(queryNode) != FT_FILE) {
             return NO_SUCH_PATH;
         }
         fileContents = (char*)DynArray_get(Node_getFileContents(queryNode), 0);
-        if (strlen(fileContents) != length) {
+        if ((size_t*)strlen(fileContents) != length) {
             return NO_SUCH_PATH;
         }
     }
