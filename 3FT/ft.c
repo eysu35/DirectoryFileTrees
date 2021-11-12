@@ -245,7 +245,7 @@ int FT_insertDir(char *path) {
     if (FT_containsFile(path)) {
         return NOT_A_DIRECTORY;
     }
-    else if (FT_containsDir(path)) {
+    if (FT_containsDir(path)) {
         return ALREADY_IN_TREE;
     }
 
