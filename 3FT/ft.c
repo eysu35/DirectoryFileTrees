@@ -251,9 +251,10 @@ boolean FT_containsDir(char *path) {
         result = FALSE;
     else if(strcmp(path, Node_getPath(curr)))
         result = FALSE;
-    else
+    else {
         assert(Node_getType(curr) == DIRECTORY);
         result = TRUE;
+    }
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
