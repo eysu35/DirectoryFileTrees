@@ -141,11 +141,6 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
         }
     }
     else {
-        if (type == FT_FILE) {
-            if (!strcmp(path, Node_getPath(FT_getFileNode(path)))) {
-                return ALREADY_IN_TREE;
-            }
-        }
         if(!strcmp(path, Node_getPath(curr))) {
             return ALREADY_IN_TREE;
         }
@@ -369,6 +364,10 @@ int FT_insertFile(char *path, void *contents, size_t length){
     /* can't insert a file as the root node */
     if (root == NULL){
         return CONFLICTING_PATH;
+    }
+
+    if (FT_containsFile(path)) {
+        return ALREADY_IN_TREE;
     }
 
     /* set current to last existing node in the path */ 
