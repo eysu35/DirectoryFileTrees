@@ -580,6 +580,7 @@ void *FT_replaceFileContents(char *path, void *newContents, size_t newLength) {
  */
 int FT_stat(char *path, boolean *type, size_t *length) {
     Node_T queryNode;
+    DynArray_T temp;
     char *fileContents;
 
     assert(path != NULL);
@@ -595,21 +596,17 @@ int FT_stat(char *path, boolean *type, size_t *length) {
     }
 
     /* Verify type and length of content matches (if a file). */
-    if (type == (boolean*)TRUE) {
-        if (Node_getType(queryNode) != FT_FILE) {
-            return NO_SUCH_PATH;
-        }
-        fileContents = (char*)DynArray_get(Node_getFileContents(queryNode), 0);
-        if ((size_t*)strlen(fileContents) != length) {
-            return NO_SUCH_PATH;
-        }
+    /* IF A FILE, store type and file contents and return SUCCESS. */
+    if (FT_getFileNode(path) != NULL) {
+        queryNode = FT_getFileNode(path);
+        temp = Node_getFileContents(queryNode);
+        fileContents = (char*)DynArray_get(temp, 0);
+        type = TRUE;
+        length = strlen(fileContents);
     }
     else {
-        if (Node_getType(queryNode) != DIRECTORY) {
-            return NO_SUCH_PATH;
-        }
+        type = FALSE;
     }
-
     return SUCCESS;
 }
 
