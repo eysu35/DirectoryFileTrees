@@ -495,14 +495,11 @@ int FT_rmFile(char *path){
     
     curr = FT_getFileNode(path);
     if (curr == NULL) {
-        return NO_SUCH_PATH;
+        return NOT_A_FILE;
     }
     if (Node_getPath(curr) != path) {
         if (Node_getType(curr) == FT_FILE) {
             return NO_SUCH_PATH;
-        }
-        else {
-            return NOT_A_FILE;
         }
     }
         
