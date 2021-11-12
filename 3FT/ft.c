@@ -118,7 +118,6 @@ static int FT_linkParentToChild(Node_T parent, Node_T child) {
       (void) Node_destroy(child);
       return PARENT_CHILD_ERROR;
    }
-
    return SUCCESS;
 }
 
@@ -149,11 +148,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
 
     assert(path != NULL);
 
-    /* Conditional checks for invariants. If invariant tests pass,
-    increment restPath to point to the end of the current path we're on.
-    For example, if the currPath is 'a/b/c/' and path is 'a/b/c/d/e/', 
-    restPath would now point to d. */
-
+    /* Conditional checks for invariants. */
     if(curr == NULL) {
         if(root != NULL) {
             return CONFLICTING_PATH;
@@ -167,7 +162,9 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     }
 
     /* Allocates memory for defensive copy, copies restPath -> 
-    copyPath, and gets first instance of a non-'/' character. */
+    copyPath, and gets first instance of a non-'/' character. 
+    Also gets restPathCount which is used to track where we're at
+    in the path as we iterate through dirToken.*/
     copyPath = malloc(strlen(restPath)+1);
     if(copyPath == NULL)
         return MEMORY_ERROR;
@@ -175,15 +172,22 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     restPathCount = strlen(copyPath);
     dirToken = strtok(copyPath, "/");
 
+    /* While there are still dirToken elements that exist (meaning
+    there are still parts of the path we haven't traversed), create 
+    new directory nodes along the path and link appropriately. 
+    
+    If we're trying to insert a file,
+    insert a file node once we know we're at the "last" dirToken of 
+    the path. For example, if we're trying to insert a file at 
+    'a/b/D', insert a file node once dirToken = D. */
     while(dirToken != NULL) {
         restPathCount -= strlen(dirToken) + 1;
-        /* About to add the last file node */
+        /* Add the last file node */
         if (type == FT_FILE && restPathCount == -1) {
             new = Node_create(dirToken, curr, FT_FILE);
         }
-        
-        /* for every other new node in the path, make a
-        new directory node */
+        /* For every other new node in the path, make a
+        new directory node. */
         else{
             new = Node_create(dirToken, curr, DIRECTORY);
         }
@@ -264,12 +268,11 @@ int FT_insertDir(char *path) {
     at the end of this path. */
     curr = FT_getEndOfPathNode(path, root);
 
-    /* manipulate path so it is a prefix up to the first file instance. */
+    /* Check that we're not inserting a directory behind a file. */
     fileNode = FT_getFileNode(path);
     pathCopy = NULL;
     if (fileNode != NULL) {
         pathCopy = (char*)Node_getPath(fileNode);
-        /* strcpy(pathCopy, Node_getPath(fileNode)); */
         if (FT_containsFile(pathCopy)) {
             return NOT_A_DIRECTORY;
         }
