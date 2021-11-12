@@ -235,7 +235,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
 int FT_insertDir(char *path) {
     Node_T curr;
     Node_T fileNode;
-    char *pathCopy;
+    const char *pathCopy;
     int result;
 
     assert(CheckerFT_isValid(isInitialized,root,count));
