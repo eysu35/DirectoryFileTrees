@@ -379,7 +379,6 @@ int FT_insertFile(char *path, void *contents, size_t length){
     result = FT_insertRestOfPath(path, curr, FT_FILE);
 
     if (result != SUCCESS) {
-        Node_destroy(curr);
         return result;
     }
 
