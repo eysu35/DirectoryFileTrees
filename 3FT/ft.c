@@ -340,7 +340,7 @@ int FT_insertFile(char *path, void *contents, size_t length){
 
     /* can't insert a file as the root node */
     if (root == NULL){
-        return NOT_A_DIRECTORY;
+        return CONFLICTING_PATH;
     }
 
     /* set current to last existing node in the path */ 
