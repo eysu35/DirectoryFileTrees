@@ -235,13 +235,13 @@ void* Node_updateFileContents(Node_T n, void *contents) {
    if (n->type == DIRECTORY) {
       return (DynArray_T)NULL;
    }
-
+   if (DynArray_getLength(n->contents) < i){
+      DynArray_grow(n->contents);
+   }
    old_contents = DynArray_set(n->contents, i, contents);
    assert(CheckerFT_Node_isValid(n));
 
    return old_contents;
-
-   /* this should rertunr old contents */
 }
 
 /* Reset Node_T n's length field to new length of contents */
