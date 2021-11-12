@@ -581,6 +581,8 @@ void *FT_replaceFileContents(char *path, void *newContents, size_t newLength) {
 int FT_stat(char *path, boolean *type, size_t *length) {
     Node_T queryNode;
     DynArray_T temp;
+    boolean *typeCopy = type;
+    size_t *lengthCopy = length;
     char *fileContents;
 
     assert(path != NULL);
@@ -601,8 +603,8 @@ int FT_stat(char *path, boolean *type, size_t *length) {
         queryNode = FT_getFileNode(path);
         temp = Node_getFileContents(queryNode);
         fileContents = (char*)DynArray_get(temp, 0);
-        type = (boolean*)TRUE;
-        length = (size_t*)strlen(fileContents);
+        typeCopy = (boolean*)TRUE;
+        lengthCopy = (size_t*)strlen(fileContents);
     }
     else {
         type = (boolean*)FALSE;
