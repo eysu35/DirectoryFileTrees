@@ -319,6 +319,20 @@ int FT_rmDir(char *path) {
     return result;
 }
 
+/* Retrieves file node at given path at given directory node. */
+static Node_T FT_getFileNode(char *path, Node_T parent) {
+    Node_T fileNode;
+    size_t i;
+
+    for (i = 0; i < Node_getNumChildren(parent); i++) {
+        if (!strcmp(Node_getPath(Node_getChild(parent, i)), path)){
+            fileNode = Node_getChild(parent, i);
+            return fileNode;
+        }
+    }
+    return NULL;
+}
+
 /*
    Inserts a new file into the hierarchy at the given path, with the
    given contents of size length bytes.
@@ -359,12 +373,7 @@ int FT_insertFile(char *path, void *contents, size_t length){
 
     /* Set file contents. */
     curr = FT_getEndOfPathNode(path, root);
-    for (i = 0; i < Node_getNumChildren(curr); i++) {
-        if (!strcmp(Node_getPath(Node_getChild(curr, i)), path)){
-            curr = Node_getChild(curr, i);
-            break;
-        }
-    }
+    curr = FT_getFileNode(path, curr);
     result = Node_updateFileContents(curr, contents);
 
     if (result != SUCCESS) {
