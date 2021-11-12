@@ -34,12 +34,16 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
     size_t i;
 
     assert(path != NULL);
-    assert(curr != NULL);
+
+    /* if root is null, then return null */
+    if (curr == NULL){
+        return NULL;
+    }
 
     /* If query path and path to current node are equivalent (and the current
     node is a directory), return the currrent node. If they match and
     are not a directory, return NOT_A_DIRECTORY. */
-    else if(!strcmp(path,Node_getPath(curr))) { 
+    if(!strcmp(path,Node_getPath(curr))) { 
         if (Node_getType(curr) == DIRECTORY) {
             return curr;
         }
@@ -212,10 +216,6 @@ int FT_insertDir(char *path) {
 
     if(!isInitialized)
         return INITIALIZATION_ERROR;
-
-    if (root == NULL){
-        return CONFLICTING_PATH;
-    }
     
     /* Gets node at the end of the query path, so we can insert directory
     at the end of this path. */
