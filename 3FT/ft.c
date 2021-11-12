@@ -42,7 +42,7 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
 
     /* If query path and path to current node are equivalent (and the current
     node is a directory), return the currrent node. If they match and
-    are not a directory, return NOT_A_DIRECTORY. */
+    are not a directory, return NULL. */
     if(!strcmp(path,Node_getPath(curr))) { 
         if (Node_getType(curr) == DIRECTORY) {
             return curr;
