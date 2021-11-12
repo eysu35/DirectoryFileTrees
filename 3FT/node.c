@@ -32,6 +32,11 @@ struct node {
    of a file are stored. Children will be stored in lexicographic 
    order. */
    DynArray_T contents;
+
+
+   /* stores the length of the contents of a file node. Is NULL for
+   a directory node */
+   size_t length;
 };
 
 
@@ -89,6 +94,7 @@ Node_T Node_create(const char* dir, Node_T parent, nodeType type){
    new->type = type;
 
    new->parent = parent;
+   new->length = NULL;
    new->contents = DynArray_new(0);
    if(new->contents == NULL) {
       free(new->path);
@@ -217,22 +223,30 @@ Node_T Node_getParent(Node_T n) {
    return n->parent;
 }
 
-/* For Node_T n, updates n's contents to contents. */
-int Node_updateFileContents(Node_T n, char *contents) {
+/* For Node_T n, updates n's old contents to contents. */
+dynArray Node_updateFileContents(Node_T n, void *contents) {
    size_t i = 0;
+   dynArray old_contents;
 
    assert(n != NULL);
    assert(CheckerFT_Node_isValid(n));
 
    if (n->type == DIRECTORY) {
-      return PARENT_CHILD_ERROR;
+      return NULL;
    }
 
-   if(DynArray_addAt(n->contents, i, contents) != TRUE) {
-      return 0;
-   }
+   old_contents = DynArray_set(n->contents, i, contents)
    assert(CheckerFT_Node_isValid(n));
-   return SUCCESS;
+
+   return old_contents;
+
+   /* this should rertunr old contents */
+}
+
+/* Reset Node_T n's length field to new length of contents */
+void Node_updateLength(NodeT n, size_t new_length){
+   assert(n != NULL);
+   n->length = new_length;
 }
 
 /* see node.h for specification */

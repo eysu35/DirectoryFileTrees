@@ -432,9 +432,17 @@ int FT_insertFile(char *path, void *contents, size_t length){
     }
 
     /* Set file contents. */
+    /* this will only return NULL if curr is a directory or if
+    contents itself is NULL. We will check for the first case. 
+    The second is acceptable. */
     curr = FT_getFileNode(path);
-    result = Node_updateFileContents(curr, contents);
+    assert(curr != NULL);
+    assert(curr->type == FT_FILE)
 
+    Node_updateFileContents(curr, contents);
+    Node_updateLength(currr, length);
+
+    /* check if reuslt is null */
     if (result != SUCCESS) {
         Node_destroy(curr);
         return result;
@@ -555,13 +563,13 @@ void *FT_replaceFileContents(char *path, void *newContents, size_t newLength) {
 
     /* Get File Node. */
     queryNode = FT_getFileNode(path);
-    assert(CheckerFT_Node_isValid(queryNode));
+    if (queryNode == NULL)
+        return NULL;
 
     /* Get queryNode's dynArray, update its contents to newContents, and 
-    store the old contents in local variable. */
-    oldContents = DynArray_set(Node_getFileContents(queryNode), 0, newContents);
-    
-    assert(CheckerFT_Node_isValid(queryNode));
+    store the old contents in local variable. */ 
+    Node_updateFileContents(queryNode, newContents);
+    Node_updateLength(queryNode, newLength);
 
     return oldContents;
 }
