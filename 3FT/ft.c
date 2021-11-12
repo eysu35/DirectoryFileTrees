@@ -234,6 +234,8 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
 */
 int FT_insertDir(char *path) {
     Node_T curr;
+    Node_T fileNode;
+    char *pathCopy;
     int result;
 
     assert(CheckerFT_isValid(isInitialized,root,count));
@@ -249,6 +251,15 @@ int FT_insertDir(char *path) {
     /* Gets node at the end of the query path, so we can insert directory
     at the end of this path. */
     curr = FT_getEndOfPathNode(path, root);
+
+    /* manipulate path so it is a prefix up to the first file instance. */
+    fileNode = FT_getFileNode(path);
+    if (fileNode != NULL) {
+        strncpy(pathCopy, path, strlen(Node_getPath(fileNode)));
+        if (FT_containsFile(pathCopy)) {
+            return NOT_A_DIRECTORY;
+        }
+    }
     
     /* Inserts path at the farthest node in the current path. */
     result = FT_insertRestOfPath(path, curr, DIRECTORY);
