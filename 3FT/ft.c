@@ -394,6 +394,7 @@ int FT_insertFile(char *path, void *contents, size_t length){
     Node_T fileNode;
     char *pathCopy;
     int result;
+    void *oldContents;
 
     assert(CheckerFT_isValid(isInitialized, root, count));
     assert(path != NULL);
@@ -445,8 +446,14 @@ int FT_insertFile(char *path, void *contents, size_t length){
     assert(curr != NULL);
     assert(Node_getType(curr) == FT_FILE);
 
-    Node_updateFileContents(curr, contents);
+    oldContents = Node_updateFileContents(curr, contents);
     Node_updateLength(curr, length);
+
+    if (oldContents == NULL) {
+        if (Node_getLength(curr) == 0) {
+            return MEMORY_ERROR;
+        }
+    }
 
     /* check if reuslt is null */
     if (result != SUCCESS) {
