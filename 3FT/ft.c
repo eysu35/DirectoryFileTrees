@@ -238,6 +238,10 @@ boolean FT_containsDir(char *path) {
     if(!isInitialized)
         return FALSE;
 
+    /* if tree initialized but null root */
+    if (root == NULL){
+        return FALSE;
+    }
     curr = FT_getEndOfPathNode(path, root);
 
     if(curr == NULL)
