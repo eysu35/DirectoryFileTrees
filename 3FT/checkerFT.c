@@ -144,16 +144,16 @@ boolean CheckerFT_isValid(boolean isInit, Node_T root, size_t count) {
             fprintf(stderr, "Initialized DT with non NULL root, but count == 0\n");
             return FALSE;
          }
+         /* check to make sure root has no parent */
+
+         if (Node_getParent(root) != NULL){
+            fprintf(stderr, "Root has parent node\n");
+            return FALSE;
+         }  
       }
    }
 
-   /* check to make sure root has no parent */
-   if (root != NULL){
-      if (Node_getParent(root) != NULL){
-         fprintf(stderr, "Root has parent node\n");
-         return FALSE;
-      }
-   }
+ 
 
    /* Now checks invariants recursively at each node from the root. */
    return CheckerFT_treeCheck(root);
