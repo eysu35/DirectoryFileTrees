@@ -133,11 +133,11 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     if(copyPath == NULL)
         return MEMORY_ERROR;
     strcpy(copyPath, restPath);
-    restPathCount = (int*)((strlen(copyPath) + 1)/2);
+    restPathCount = (int*)strlen(copyPath);
     dirToken = strtok(copyPath, "/");
 
     while(dirToken != NULL) {
-        restPathCount -= strlen(dirToken);
+        restPathCount -= strlen(dirToken) - 1;
         /* About to add the last file node */
         if (type == FT_FILE && restPathCount == 0) {
             new = Node_create(path, parent, FT_FILE);
