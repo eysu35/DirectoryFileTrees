@@ -221,12 +221,15 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
 
     free(copyPath);
 
+    /* Initialize root and count if they do not exist. */
     if(parent == NULL) {
         root = firstNew;
         count = newCount;
         assert(CheckerFT_isValid(isInitialized, root, count));
         return SUCCESS;
     }
+    /* Otherwise, link parent to the first new node you 
+    created in traversing restPath. */
     else {
         result = FT_linkParentToChild(parent, firstNew);
         if(result == SUCCESS)
@@ -245,27 +248,27 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
   and SUCCESS otherwise.
  */
 static int FT_rmPathAt(const char* path, Node_T curr) {
-   Node_T parent;
+    Node_T parent;
 
-   assert(path != NULL);
-   assert(curr != NULL);
+    assert(path != NULL);
+    assert(curr != NULL);
 
-   parent = Node_getParent(curr);
+    parent = Node_getParent(curr);
 
-   if(!strcmp(path,Node_getPath(curr))) {
-        if(parent == NULL)
-            root = NULL;
-        else
-            Node_unlinkChild(parent, curr);
+    if(!strcmp(path,Node_getPath(curr))) {
+            if(parent == NULL)
+                root = NULL;
+            else
+                Node_unlinkChild(parent, curr);
 
-        /* Taken from DT_removePathFrom. */
-        if(curr != NULL) {
-            count -= Node_destroy(curr);
-        }
-      return SUCCESS;
-   }
-   else
-      return NO_SUCH_PATH;
+            /* Taken from DT_removePathFrom. */
+            if(curr != NULL) {
+                count -= Node_destroy(curr);
+            }
+        return SUCCESS;
+    }
+    else
+        return NO_SUCH_PATH;
 
 }
 
@@ -275,17 +278,17 @@ static int FT_rmPathAt(const char* path, Node_T curr) {
    Returns the next unused index in d after the insertion(s).
 */
 static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) {
-   size_t c;
+    size_t c;
 
-   assert(d != NULL);
+    assert(d != NULL);
 
-   if(n != NULL) {
-      (void*) DynArray_set(d, i, Node_getPath(n));
-      i++;
-      for(c = 0; c < Node_getNumChildren(n); c++)
-         i = FT_preOrderTraversal(Node_getChild(n, c), d, i);
-   }
-   return i;
+    if(n != NULL) {
+        (void*) DynArray_set(d, i, Node_getPath(n));
+        i++;
+        for(c = 0; c < Node_getNumChildren(n); c++)
+            i = FT_preOrderTraversal(Node_getChild(n, c), d, i);
+    }
+    return i;
 }
 
 /*
@@ -294,10 +297,11 @@ static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) {
    str, and also always adds one more in addition to str's length.
 */
 static void FT_strlenAccumulate(char* str, size_t* pAcc) {
-   assert(pAcc != NULL);
+    assert(str != NULL);
+    assert(pAcc != NULL);
 
-   if(str != NULL)
-      *pAcc += (strlen(str) + 1);
+    if(str != NULL)
+        *pAcc += (strlen(str) + 1);
 }
 
 /*
@@ -306,10 +310,11 @@ static void FT_strlenAccumulate(char* str, size_t* pAcc) {
    the end of the concatenated string.
 */
 static void FT_strcatAccumulate(char* str, char* acc) {
-   assert(acc != NULL);
+    assert(str != NULL);
+    assert(acc != NULL);
 
-   if(str != NULL)
-      strcat(acc, str); strcat(acc, "\n");
+    if(str != NULL)
+        strcat(acc, str); strcat(acc, "\n");
 }
 
 /*
@@ -643,6 +648,8 @@ int FT_stat(char *path, boolean *type, size_t *length) {
     Node_T queryNode;
 
     assert(path != NULL);
+    assert(type == 0 || type == 1);
+    assert(length != NULL);
     
     /* Invariant check. */
     if (!isInitialized) {
