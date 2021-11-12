@@ -110,10 +110,12 @@ size_t Node_destroy(Node_T n) {
 
    assert(n != NULL);
 
-   for(i = 0; i < DynArray_getLength(n->contents); i++)
-   {
-      c = DynArray_get(n->contents, i);
-      count += Node_destroy(c);
+   if (Node_getType(n) == DIRECTORY){
+      for(i = 0; i < DynArray_getLength(n->contents); i++)
+         {
+            c = DynArray_get(n->contents, i);
+            count += Node_destroy(c);
+         }
    }
    DynArray_free(n->contents);
 
