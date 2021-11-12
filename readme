@@ -151,7 +151,8 @@ This area is deeply nested at level 4, consider refactoring
 
 If we want to check very specific cases in our code, we must use
 nested conditionals to filter for the cases that we want. Thus, 
-this deep nesting, although not ideal, is acceptable in 
+this deep nesting, although not ideal, is acceptable in this case
+of the CheckerDT.c as it helps us accomplish our goal. 
 
 ------------------------------------------------------------------------
 What warnings does splint generate on your Part 3 code, and what are
