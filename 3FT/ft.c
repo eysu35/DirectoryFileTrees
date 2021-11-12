@@ -364,8 +364,6 @@ boolean FT_containsDir(char *path) {
 */
 int FT_rmDir(char *path) {
     Node_T curr;
-    Node_T fileNode;
-    char *pathCopy;
     int result;
 
     assert(CheckerFT_isValid(isInitialized,root,count));
@@ -376,15 +374,13 @@ int FT_rmDir(char *path) {
 
     /* Get directory node at given path and remove
     that node, return NO_SUCH_PATH if directory node does 
-    not exists at given path. */
+    not exists at given path. If file node exist at path,
+    return NOT_A_DIRECTORY. */
     curr = FT_getEndOfPathNode(path, root);
     if(curr == NULL)
         result =  NO_SUCH_PATH;
     else
         result = FT_rmPathAt(path, curr);
-
-    /* manipulate path so it is a prefix up to the first file instance. */
-    /*fileNode = FT_getFileNode(path); */
     if (FT_containsFile(path)) {
         return NOT_A_DIRECTORY;
     }
@@ -413,24 +409,21 @@ int FT_insertFile(char *path, void *contents, size_t length){
     assert(CheckerFT_isValid(isInitialized, root, count));
     assert(path != NULL);
 
+    /* Invariant check. */
     if(!isInitialized)
         return INITIALIZATION_ERROR;
-
-    /* can't insert a file as the root node */
     if (root == NULL){
         return CONFLICTING_PATH;
     }
-
-    if (FT_containsFile(path)) {
+    if (FT_containsFile(path) || FT_containsDir(path)) {
         return ALREADY_IN_TREE;
+    }
+    if (FT_getFileNode(path)!= NULL){
+        return NOT_A_DIRECTORY;
     }
 
     /* set current to last existing node in the path */ 
     curr = FT_getEndOfPathNode(path, root);
-
-    if (FT_getFileNode(path)!= NULL){
-        return NOT_A_DIRECTORY;
-    }
 
     /* Insert file as node at appropriate location. */
     result = FT_insertRestOfPath(path, curr, FT_FILE);
