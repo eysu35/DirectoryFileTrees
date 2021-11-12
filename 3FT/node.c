@@ -94,7 +94,7 @@ Node_T Node_create(const char* dir, Node_T parent, nodeType type){
    new->type = type;
 
    new->parent = parent;
-   new->length = NULL;
+   new->length = (size_t)NULL;
    new->contents = DynArray_new(0);
    if(new->contents == NULL) {
       free(new->path);
@@ -224,7 +224,7 @@ Node_T Node_getParent(Node_T n) {
 }
 
 /* For Node_T n, updates n's old contents to contents. */
-dynArray Node_updateFileContents(Node_T n, void *contents) {
+DynArray_T Node_updateFileContents(Node_T n, void *contents) {
    size_t i = 0;
    dynArray old_contents;
 
@@ -232,10 +232,10 @@ dynArray Node_updateFileContents(Node_T n, void *contents) {
    assert(CheckerFT_Node_isValid(n));
 
    if (n->type == DIRECTORY) {
-      return NULL;
+      return (DynArray_T)NULL;
    }
 
-   old_contents = DynArray_set(n->contents, i, contents)
+   old_contents = DynArray_set(n->contents, i, contents);
    assert(CheckerFT_Node_isValid(n));
 
    return old_contents;
@@ -244,7 +244,7 @@ dynArray Node_updateFileContents(Node_T n, void *contents) {
 }
 
 /* Reset Node_T n's length field to new length of contents */
-void Node_updateLength(NodeT n, size_t new_length){
+void Node_updateLength(Node_T n, size_t new_length){
    assert(n != NULL);
    n->length = new_length;
 }
