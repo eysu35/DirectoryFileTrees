@@ -391,8 +391,6 @@ int FT_rmDir(char *path) {
 */
 int FT_insertFile(char *path, void *contents, size_t length){
     Node_T curr;
-    Node_T fileNode;
-    char *pathCopy;
     int result;
     void *oldContents;
 
