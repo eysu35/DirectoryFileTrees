@@ -122,6 +122,11 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
         }
     }
     else {
+        if (type == FT_FILE) {
+            if (!strcmp(path, Node_getPath(FT_getFileNode(path)))) {
+                return ALREADY_IN_TREE;
+            }
+        }
         if(!strcmp(path, Node_getPath(curr))) {
             return ALREADY_IN_TREE;
         }
