@@ -41,8 +41,7 @@ struct node {
 
 
 /*
-  returns a path with contents
-  n->path/dir
+  returns a path with contents n->path/dir
   or NULL if there is an allocation error.
   Allocates memory for the returned string,
   which is then owned by the caller!
@@ -133,15 +132,14 @@ size_t Node_destroy(Node_T n) {
 }
 
 /* see node.h for specification */
-/*char* Node_getPath(Node_T n) {
-   char* pathCopy;
-   assert(n != NULL);
-   pathCopy = malloc(strlen(n->path)+1);
-   if(pathCopy == NULL)
-      return NULL;
-   return strcpy(pathCopy, n->path);
+int Node_compare(Node_T node1, Node_T node2) {
+   assert(node1 != NULL);
+   assert(node2 != NULL);
+
+   return strcmp(node1->path, node2->path);
 }
-*/
+
+/* see node.h for specification */
 const char* Node_getPath(Node_T n) {
    assert(n != NULL);
 
@@ -162,15 +160,6 @@ size_t Node_getLength(Node_T n) {
    return(n->length);
 }
 
-
-/* see node.h for specification */
-int Node_compare(Node_T node1, Node_T node2) {
-   assert(node1 != NULL);
-   assert(node2 != NULL);
-
-   return strcmp(node1->path, node2->path);
-}
-
 /* see node.h for specification */
 size_t Node_getNumChildren(Node_T n) {
    assert(n != NULL);
@@ -181,7 +170,6 @@ size_t Node_getNumChildren(Node_T n) {
     else{
         return (size_t)(NOT_A_DIRECTORY);
     }
-        
 }
 
 /* see node.h for specification */
@@ -249,7 +237,7 @@ void* Node_updateFileContents(Node_T n, void *contents) {
    }
    if (DynArray_getLength(n->contents) > 1) {
       /* since addAt shifts the old contents over one index, remove
-      this old content and return void pointer to it*/
+      this old content and return void pointer to it. */
       oldContents = DynArray_removeAt(n->contents, i + 1);
    }
    assert(CheckerFT_Node_isValid(n));
@@ -260,7 +248,9 @@ void* Node_updateFileContents(Node_T n, void *contents) {
 /* Reset Node_T n's length field to new length of contents */
 void Node_updateLength(Node_T n, size_t new_length){
    assert(n != NULL);
+   assert(CheckerFT_Node_isValid(n));
    n->length = new_length;
+   assert(CheckerFT_Node_isValid(n));
 }
 
 /* see node.h for specification */

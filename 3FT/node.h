@@ -25,8 +25,13 @@ typedef struct node* Node_T;
    path (if it exists) prefixed to the directory string parameter,
    separated by a slash. It is also initialized with its parent link
    as the parent parameter value, but the parent itself is not changed
-   to link to the new node.  The children links are initialized but
-   do not point to any children.
+   to link to the new node.  The node's type is initialized to FILE or 
+   DIRECTORY depending on what argument was passed in its creation. 
+   The contents field is initialized to a dynArray of size 0 but don'tt
+   yet point to any contents (for file) or children (for dir) and the 
+   length field (which reprresents the length of the contents for a 
+   file node) is initialized to 0.
+
 */
 
 Node_T Node_create(const char* dir, Node_T parent, nodeType type);
@@ -48,23 +53,24 @@ size_t Node_destroy(Node_T n);
 int Node_compare(Node_T node1, Node_T node2);
 
 /*
-   Returns n's path.
+   Takes in Node_T n and returns n's path as const char*.
 */
 const char* Node_getPath(Node_T n);
 
 /*
-   Returns n's type.
+   Takes in Node_T n and returns n's type as int.
 */
 int Node_getType(Node_T n);
 
 /*
-   Returns n's length (of contents of file node).
+   Takes in Node_T n and returns n's length as size_t.
 */
 size_t Node_getLength(Node_T n);
 
 /*
-  Returns the number of child directories n has. If 
-  node is file, return NOT_A_DIRECTORY.
+  Takes in Node_T n and returns the number of child 
+  directories n has. If node is file, return 
+  NOT_A_DIRECTORY.
 */
 size_t Node_getNumChildren(Node_T n);
 
@@ -81,8 +87,9 @@ size_t Node_getNumChildren(Node_T n);
 int Node_hasChild(Node_T n, const char* path, size_t* childID);
 
 /*
-   Returns the child node of n with identifier childID, if one exists,
-   otherwise returns NULL.
+   Takes in Node_T n and checks to make sure n is of type 
+   DIRECTORY. If not, return NULL. If so, returns the child 
+   node of n with identifier childID, if one exists.
 */
 Node_T Node_getChild(Node_T n, size_t childID);
 
@@ -93,11 +100,11 @@ Node_T Node_getParent(Node_T n);
 
 /* 
    Updates file node n's contents to contents. A file's contents are
-   always stored at index 0 of DynArray. Return the old contents
-   of node n, which may be NULL. 
+   always stored at index 0 of DynArray. If uLength is greater than 
+   1 after adding in the new content, remove the old and return 
+   a void pointer to the old contents, which may be NULL. 
 */
 void* Node_updateFileContents(Node_T n, void *contents);
-
 
 /*
    Updates the node n's length field. Resets n->length to 
