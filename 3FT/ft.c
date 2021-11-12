@@ -583,9 +583,6 @@ int FT_stat(char *path, boolean *type, size_t *length) {
     char *fileContents;
 
     assert(path != NULL);
-    if (type) {
-        assert(type == (boolean*)FALSE || type == (boolean*)TRUE);
-    }
     if (!isInitialized) {
         return INITIALIZATION_ERROR;
     }
