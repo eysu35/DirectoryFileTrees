@@ -125,8 +125,25 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
+nodeGood.c: (in function Node_hasChild)
+nodeGood.c:172:18: Variable index used before definition
+      An rvalue is used that may not be initialized to a value on some execution
+      path. (Use -usedef to inhibit warning)
+nodeGood.c: (in function Node_unlinkChild)
+nodeGood.c:266:47: Variable i used before definition
+dynarray.c: (in function DynArray_bsearch)
+dynarray.c:428:27: Variable ppvInsert used before definition
+node.h:61:5: Function Node_getType declared but not defined
+      A function or variable is declared, but not defined in any source code file.
+      (Use -declundef to inhibit warning)
 
-
+These first four warnings are worried that we are returning or accessing
+variables that were defined in function calls or conditionals. For ex,
+some of these variables are manipulated by passing their memory address
+to dynarray_bsearch. However, we are confident that each of the functions
+that manipulate these variables are essential to the module working and 
+thus these variables will all be initialized at the end. (we see
+these same 4 warnings again in partt 3)
 ------------------------------------------------------------------------
 What warnings does critTer generate on checkerDT.c, and what are your
 disagreements with them? Copy the critTer warnings here, and express
@@ -171,7 +188,7 @@ node.c:343:48: Variable i used before definition
 dynarray.c: (in function DynArray_bsearch)
 dynarray.c:428:27: Variable ppvInsert used before definition
 
-These first three errors are worried that we are returning or accessing
+These first four warnings are worried that we are returning or accessing
 variables that were defined in function calls or conditionals. For ex,
 some of these variables are manipulated by passing their memory address
 to dynarray_bsearch. However, we are confident that each of the functions
@@ -197,7 +214,7 @@ your disagreements with them? Copy the critTer warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-ft.c:
+---------------------- ft.c ---------------------------
 
 Warning #1: 
 ft.c: line 746: low priority: 
@@ -234,6 +251,38 @@ this file contains 746 lines
 
 We disagree - same reasoning as Warning #1. 
 
+--------------  node.c ----------------------------
+
+node.c: line 393: low priority:
+A file should contain no more than 15 functions;
+this file contains 18 functions
+
+We sacrificed having fewer functions to modularize our 
+code and reduce repetition of logic throughout the functions.
+
+node.c: line 176: medium priority:
+Do you want to validate 'childID' through an assert?
+
+We disagree with this warning since 'childID' is of 
+type size_t. If we were to assert it is not null, we 
+would have to cast it to a type_t to avoid a type error. 
+However, that would change the NULL to a size_t 0. Since
+'childID' is allowed to be 0, that would be wrong. 
+
+node.c: line 223: medium priority:
+Do you want to validate 'contents' through an assert?
+
+No. Contents are allowed to be NULL so we do not need to 
+assert otherwise. 
+
+node.c: line 265: low priority:
+This function definition probably needs more local comments
+
+Since this function is taken directly from the sample code, 
+we did not feel that we had to include comments. If our own
+code was as long as this function, we included many comments
+to make it more readable!
+
 ------------------------------------------------------------------------
 For each of the first three faulty BDT implementations required by Step
 1.5, identify the function where there is a bug. You do not have to
@@ -258,7 +307,10 @@ For bdtBad4, you do not have to find the bug. Instead, indicate what
 is the fundamental difference with trying to debug this executable in
 gdb versus the first three:
 
-
+bdtBad4 was significantlyy easier to debug due to all of the in
+function comments. Although there was a bug in the code, this
+generous commenting is good programming practice and should be 
+simulated in our own code. 
 
 For bdtBad5, you do not have to find the bug. Instead, indicate one
 hypothesis for how the program could crash within the DynArray module,
