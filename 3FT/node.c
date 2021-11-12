@@ -244,12 +244,13 @@ void* Node_updateFileContents(Node_T n, void *contents) {
       return NULL;
    }
    result = DynArray_addAt(n->contents, i, contents);
-   /* since addAt shifts the old contents over one index, remove
-   this old content and return void pointer to it*/
-   oldContents = DynArray_removeAt(n->contents, i + 1);
    if (result != 1) {
       return NULL;
    }
+
+   /* since addAt shifts the old contents over one index, remove
+   this old content and return void pointer to it*/
+    oldContents = DynArray_removeAt(n->contents, i + 1);
    /* old_contents = DynArray_set(n->contents, i, contents); */
    assert(CheckerFT_Node_isValid(n));
 
