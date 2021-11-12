@@ -521,6 +521,7 @@ int FT_rmFile(char *path){
 */
 void *FT_getFileContents(char *path){
     Node_T curr;
+    DynArray_T temp;
     char* contents;
 
     assert(path != NULL);
@@ -528,11 +529,15 @@ void *FT_getFileContents(char *path){
         return NULL;
     }
 
-    curr = FT_getEndOfPathNode(path, root);
-    if (Node_getType(curr) == DIRECTORY){
+    curr = FT_getFileNode(path);
+    if (curr == NULL) {
         return NULL;
     }
-    contents = (char*) DynArray_get(Node_getFileContents(curr), 0);
+    temp = Node_getFileContents(curr);
+    if (temp == NULL) {
+        return NULL;
+    }
+    contents = (char*) DynArray_get(temp, 0);
     return contents;
 }
 
