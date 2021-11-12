@@ -108,7 +108,7 @@ void* Node_updateFileContents(Node_T n, void *contents);
 
 /*
    Updates the node n's length field. Resets n->length to 
-   new_length. 
+   newLength. 
 */
 void Node_updateLength(Node_T n, size_t newLength);
 
@@ -142,7 +142,7 @@ int Node_unlinkChild(Node_T parent, Node_T child);
   Creates a new node such that the new node's path is dir appended to
   n's path, separated by a slash, and that the new node has no
   children of its own. The new node's parent is n, and the new node is
-  added as a child of n.
+  added as a child of n. The new node should be of type type.
 
   (Reiterating for clarity: unlike with Node_create, parent *is*
   changed so that the link is bidirectional.)

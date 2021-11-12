@@ -123,7 +123,8 @@ static int FT_linkParentToChild(Node_T parent, Node_T child) {
 
 /*
    Inserts a new path into the tree rooted at parent, or, if
-   parent is NULL, as the root of the data structure.
+   parent is NULL, as the root of the data structure. The leaf
+   node of the path should be set to type type. 
 
    If a node representing path already exists, returns ALREADY_IN_TREE
 
