@@ -384,13 +384,10 @@ int FT_rmDir(char *path) {
         result = FT_rmPathAt(path, curr);
 
     /* manipulate path so it is a prefix up to the first file instance. */
-    fileNode = FT_getFileNode(path);
-    if (fileNode != NULL) {
-        /* pathCopy = (char*)Node_getPath(fileNode);
-        if (FT_containsFile(pathCopy))* {*/
-            return NOT_A_DIRECTORY;
+    /*fileNode = FT_getFileNode(path); */
+    if (FT_containsFile(path)) {
+        return NOT_A_DIRECTORY;
     }
-   /* }*/
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
