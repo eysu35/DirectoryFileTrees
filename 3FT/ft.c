@@ -460,12 +460,10 @@ int FT_insertFile(char *path, void *contents, size_t length){
 
 
     /* check if reuslt is null */
-    /*
     if (result != SUCCESS) {
         Node_destroy(curr);
         return result;
     }
-    */
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
