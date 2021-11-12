@@ -246,10 +246,10 @@ void* Node_updateFileContents(Node_T n, void *contents) {
 }
 
 /* Reset Node_T n's length field to new length of contents */
-void Node_updateLength(Node_T n, size_t new_length){
+void Node_updateLength(Node_T n, size_t newLength){
    assert(n != NULL);
    assert(CheckerFT_Node_isValid(n));
-   n->length = new_length;
+   n->length = newLength;
    assert(CheckerFT_Node_isValid(n));
 }
 

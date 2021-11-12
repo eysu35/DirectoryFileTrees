@@ -40,9 +40,11 @@ boolean CheckerFT_Node_isValid(Node_T n) {
    if (Node_getType(n) == 1){
       /* check that actual length of file contents matches node's 
       length field */
-      if (DynArray_getLength(Node_getFileContents(n)) != Node_getLength(n)){
-         fprintf(stderr, "Length of node's contents do not match node->length");
-         return FALSE;
+      if (Node_getFileContents(n) != NULL && Node_getLength(n) != 0) {
+         if (DynArray_getLength(Node_getFileContents(n)) != 1) {
+            fprintf(stderr, "Length of node's contents do not match node->length\n");
+            return FALSE;
+         }
       }
    }
 
