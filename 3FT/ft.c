@@ -595,8 +595,7 @@ int FT_stat(char *path, boolean *type, size_t *length) {
     }
 
     /* Get queryNode */
-    queryNode = FT_getEndOfPathNode(path, root);
-    if (queryNode == NULL) {
+    if (FT_containsDir(path) == FALSE && FT_containsFile(path) == FALSE) {
         return NO_SUCH_PATH;
     }
 
