@@ -431,8 +431,11 @@ int FT_insertFile(char *path, void *contents, size_t length){
         return result;
     }
 
-    /* Set file contents. */
-    /* this will only return NULL if curr is a directory or if
+    /* Set file contents.
+    Do so by retrieving the newly created file node, update
+    its contents and length, and verify its contents were 
+    sucessfully set. 
+    This will only return NULL if curr is a directory or if
     contents itself is NULL. We will check for the first case. 
     The second is acceptable. */
     curr = FT_getFileNode(path);
@@ -447,14 +450,6 @@ int FT_insertFile(char *path, void *contents, size_t length){
             return MEMORY_ERROR;
         }
     }
-
-    /* check if reuslt is null */
-    /*
-    if (result != SUCCESS) {
-        Node_destroy(curr);
-        return result;
-    }
-    */
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
