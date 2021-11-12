@@ -499,7 +499,7 @@ int FT_stat(char *path, boolean *type, size_t *length) {
     }
 
     /* Verify type and length of content matches (if a file). */
-    if ((boolean*)type == TRUE) {
+    if (type == (boolean*)TRUE) {
         if (Node_getType(queryNode) != FT_FILE) {
             return NO_SUCH_PATH;
         }
