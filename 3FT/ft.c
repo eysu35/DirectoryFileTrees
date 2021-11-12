@@ -235,7 +235,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
 int FT_insertDir(char *path) {
     Node_T curr;
     Node_T fileNode;
-    const char *pathCopy;
+    char *pathCopy;
     int result;
 
     assert(CheckerFT_isValid(isInitialized,root,count));
@@ -258,7 +258,7 @@ int FT_insertDir(char *path) {
     /* manipulate path so it is a prefix up to the first file instance. */
     fileNode = FT_getFileNode(path);
     if (fileNode != NULL) {
-        pathCopy = Node_getPath(fileNode);
+        (const*)pathCopy = Node_getPath(fileNode);
         if (FT_containsFile(pathCopy)) {
             return NOT_A_DIRECTORY;
         }
