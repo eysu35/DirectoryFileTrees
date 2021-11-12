@@ -215,10 +215,6 @@ int FT_insertDir(char *path) {
     if(!isInitialized)
         return INITIALIZATION_ERROR;
     
-    /* can't insert a file as the root node */
-    if (root == NULL){
-        return NOT_A_DIRECTORY;
-    }
     /* Gets node at the end of the query path, so we can insert directory
     at the end of this path. */
     curr = FT_getEndOfPathNode(path, root);
@@ -341,6 +337,11 @@ int FT_insertFile(char *path, void *contents, size_t length){
 
     if(!isInitialized)
         return INITIALIZATION_ERROR;
+
+    /* can't insert a file as the root node */
+    if (root == NULL){
+        return NOT_A_DIRECTORY;
+    }
 
     /* set current to last existing node in the path */ 
     curr = FT_getEndOfPathNode(path, root);
