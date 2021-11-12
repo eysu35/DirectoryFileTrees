@@ -170,7 +170,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     if(copyPath == NULL)
         return MEMORY_ERROR;
     strcpy(copyPath, restPath);
-    restPathCount = strlen(copyPath);
+    restPathCount = (int)strlen(copyPath);
     dirToken = strtok(copyPath, "/");
 
     /* While there are still dirToken elements that exist (meaning
@@ -505,7 +505,6 @@ int FT_insertFile(char *path, void *contents, size_t length){
 */
 boolean FT_containsFile(char *path){
     Node_T curr;
-    boolean result;
 
     assert(CheckerFT_isValid(isInitialized, root, count));
     assert(path != NULL);
@@ -522,12 +521,9 @@ boolean FT_containsFile(char *path){
         return FALSE;
     else if (strcmp(path, Node_getPath(curr)))
         return FALSE;
-    else {
-        result = TRUE;
-    }
 
     assert(CheckerFT_isValid(isInitialized, root, count));
-    return result;
+    return TRUE;
 }
 
 /*
