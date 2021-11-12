@@ -94,7 +94,7 @@ Node_T Node_create(const char* dir, Node_T parent, nodeType type){
    new->type = type;
 
    new->parent = parent;
-   new->length = (size_t)NULL;
+   new->length = (size_t)0;
    /* initialize DynArray size to 1 to be able to store file contents */
    new->contents = DynArray_new(0);
    if(new->contents == NULL) {
@@ -231,19 +231,6 @@ Node_T Node_getParent(Node_T n) {
    return n->parent;
 }
 
-
-int Node_setFileContents(Node_T n, void *contents){
-   int i = 0;
-   int result;
-
-   assert(n != NULL)
-   assert(CheckerFT_Node_isValid(n));
-
-   if (DynArray_addAt(n, i, contents) == 1)
-      result = SUCCESS;
-
-   return RESULT;
-}
 
 /* For Node_T n, updates n's old contents to contents. */
 void* Node_updateFileContents(Node_T n, void *contents) {
