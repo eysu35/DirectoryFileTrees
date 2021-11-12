@@ -65,6 +65,25 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
     return NULL;
 }
 
+/* Returns file node at given path, or NULL if it does not exist. */
+static Node_T FT_getFileNode(char *path) {
+    Node_T fileNode;
+    Node_T parent;
+    size_t i;
+
+    assert(path != NULL);
+
+    parent = FT_getEndOfPathNode(path, root);
+
+    for (i = 0; i < Node_getNumChildren(parent); i++) {
+        if (!strcmp(Node_getPath(Node_getChild(parent, i)), path)){
+            fileNode = Node_getChild(parent, i);
+            return fileNode;
+        }
+    }
+    return NULL;
+}
+
 /*
    Given a prospective parent and child node,
    adds child to parent's children list, if possible
@@ -122,6 +141,11 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
         }
     }
     else {
+        if (type == FT_FILE) {
+            if (!strcmp(path, Node_getPath(FT_getFileNode(path)))) {
+                return ALREADY_IN_TREE;
+            }
+        }
         if(!strcmp(path, Node_getPath(curr))) {
             return ALREADY_IN_TREE;
         }
@@ -318,25 +342,6 @@ int FT_rmDir(char *path) {
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
-}
-
-/* Returns file node at given path, or NULL if it does not exist. */
-static Node_T FT_getFileNode(char *path) {
-    Node_T fileNode;
-    Node_T parent;
-    size_t i;
-
-    assert(path != NULL);
-
-    parent = FT_getEndOfPathNode(path, root);
-
-    for (i = 0; i < Node_getNumChildren(parent); i++) {
-        if (!strcmp(Node_getPath(Node_getChild(parent, i)), path)){
-            fileNode = Node_getChild(parent, i);
-            return fileNode;
-        }
-    }
-    return NULL;
 }
 
 /*
