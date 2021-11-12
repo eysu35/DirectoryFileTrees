@@ -422,7 +422,7 @@ boolean FT_containsFile(char *path){
         return FALSE;
     if (Node_getType(curr) == DIRECTORY)
         return FALSE;
-    else if (strcmp(path, Node_getPath(curr)))
+    else if (strncmp(path, Node_getPath(curr), strlen(Node_getPath(curr))))
         return FALSE;
     else {
         result = TRUE;
