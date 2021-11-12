@@ -479,7 +479,43 @@ void *FT_replaceFileContents(char *path, void *newContents, size_t newLength) {
 
   When returning a non-SUCCESS status, *type and *length are unchanged.
  */
-int FT_stat(char *path, boolean *type, size_t *length);
+int FT_stat(char *path, boolean *type, size_t *length) {
+    Node_T queryNode;
+    char *fileContents;
+
+    assert(path != NULL);
+    if (type) {
+        assert(type == FALSE || type == TRUE);
+    }
+    if (!isInitialized) {
+        return INITIALIZATION_ERROR;
+    }
+
+    /* Get queryNode */
+    queryNode = FT_getEndOfPathNode(path, root);
+
+    if (queryNode == NULL) {
+        return NO_SUCH_PATH;
+    }
+
+    /* Verify type and length of content matches (if a file). */
+    if (type == TRUE) {
+        if (Node_getType(queryNode) != FT_FILE) {
+            return NO_SUCH_PATH;
+        }
+        fileContents = (char*)DynArray_get(Node_getFileContents(queryNode), 0);
+        if (strlen(fileContents) != length) {
+            return NO_SUCH_PATH;
+        }
+    }
+    else {
+        if (Node_getType(queryNode) != DIRECTORY) {
+            return NO_SUCH_PATH;
+        }
+    }
+
+    return SUCCESS;
+}
 
 /*
   Sets the data structure to initialized status.
