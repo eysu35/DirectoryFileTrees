@@ -137,8 +137,7 @@ int main(void) {
   assert(FT_stat("b/H", &b, &l) == SUCCESS);
   assert(b == TRUE);
   assert(l == 14);
-  assert(!strcmp(FT_replaceFileContents("b/H","Kernighan",10),
-                 "hello, world!"));
+  assert(!strcmp(FT_replaceFileContents("b/H","Kernighan",10),"hello, world!"));
   assert(!strcmp((char*)FT_getFileContents("b/H"),"Kernighan"));
   assert(FT_stat("b/H", &b, &l) == SUCCESS);
   assert(b == TRUE);
