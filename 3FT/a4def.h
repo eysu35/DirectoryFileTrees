@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
 /* a4def.h                                                            */
-/* Author: Christopher Moretti                                        */
+/* Authors: Michael Garcia and Ellen Su                               */
 /*--------------------------------------------------------------------*/
 
 #ifndef A4DEF_INCLUDED

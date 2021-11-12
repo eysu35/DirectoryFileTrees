@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
 /* ft_client.c                                                        */
-/* Author: Christopher Moretti                                        */
+/* Authors: Ellen Su and Michael Garcia                               */
 /*--------------------------------------------------------------------*/
 
 #include <assert.h>

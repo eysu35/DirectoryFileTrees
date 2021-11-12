@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
 /* dynarray.h                                                         */
-/* Author: Bob Dondero                                                */
+/* Authors: Ellen Su and Michael Garcia                               */
 /*--------------------------------------------------------------------*/
 
 #ifndef DYNARRAY_INCLUDED
