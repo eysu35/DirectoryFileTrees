@@ -137,7 +137,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     dirToken = strtok(copyPath, "/");
 
     while(dirToken != NULL) {
-        restPathCount -= strlen(dirToken) - 1;
+        restPathCount -= strlen(dirToken) + 1;
         /* About to add the last file node */
         if (type == FT_FILE && restPathCount == 0) {
             new = Node_create(path, parent, FT_FILE);
