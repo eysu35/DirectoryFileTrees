@@ -590,7 +590,6 @@ int FT_stat(char *path, boolean *type, size_t *length) {
 
     /* Get queryNode */
     queryNode = FT_getEndOfPathNode(path, root);
-
     if (queryNode == NULL) {
         return NO_SUCH_PATH;
     }
