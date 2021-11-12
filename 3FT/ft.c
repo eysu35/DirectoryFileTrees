@@ -74,6 +74,9 @@ static Node_T FT_getFileNode(char *path) {
     assert(path != NULL);
 
     parent = FT_getEndOfPathNode(path, root);
+    if (parent == NULL) {
+        return NULL;
+    }
 
     for (i = 0; i < Node_getNumChildren(parent); i++) {
         if (!strcmp(Node_getPath(Node_getChild(parent, i)), path)){
