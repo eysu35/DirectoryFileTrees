@@ -257,6 +257,7 @@ int FT_insertDir(char *path) {
 
     /* manipulate path so it is a prefix up to the first file instance. */
     fileNode = FT_getFileNode(path);
+    pathCopy = NULL;
     if (fileNode != NULL) {
         strcpy(pathCopy, Node_getPath(fileNode));
         if (FT_containsFile(pathCopy)) {
