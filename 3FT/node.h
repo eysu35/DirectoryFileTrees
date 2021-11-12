@@ -110,7 +110,7 @@ void* Node_updateFileContents(Node_T n, void *contents);
    Updates the node n's length field. Resets n->length to 
    new_length. 
 */
-void Node_updateLength(Node_T n, size_t new_length);
+void Node_updateLength(Node_T n, size_t newLength);
 
 /*
    Returns a DynArray representation of the contents of a file node, 
