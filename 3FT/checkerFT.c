@@ -51,7 +51,7 @@ boolean CheckerFT_Node_isValid(Node_T n) {
       }
 
       /* Check that type is valid. */
-      if (Node_getType(n) != 0 || Node_getType(n) != 1) {
+      if (Node_getType(n) != 0 && Node_getType(n) != 1) {
           fprintf(stderr, "Node's type is not valid.");
           return FALSE;
       }
