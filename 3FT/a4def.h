@@ -15,10 +15,12 @@ enum { SUCCESS,
 
 /* In lieu of a proper boolean datatype */
 enum bool { FALSE, TRUE };
+/* Declaration of boolean datatype */
 typedef enum bool boolean;
 
 /* Declares if Node is a file or directory. */
 enum type { DIRECTORY, FT_FILE };
+/* Declaration of nodeType datatype */
 typedef enum type nodeType;
 
 #endif
