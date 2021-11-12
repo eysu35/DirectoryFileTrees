@@ -113,8 +113,10 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
     increment restPath to point to the end of the current path we're on.
     For example, if the currPath is 'a/b/c/' and path is 'a/b/c/d/e/', 
     restPath would now point to d. */
-    if (root == NULL) && (type = FT_FILE){
-        return NOT_A_DIRECTORY;
+    if (root == NULL)
+        if (type = FT_FILE){
+            return NOT_A_DIRECTORY;
+        }
     }
 
     if(curr == NULL) {
