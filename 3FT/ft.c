@@ -485,7 +485,7 @@ int FT_stat(char *path, boolean *type, size_t *length) {
 
     assert(path != NULL);
     if (type) {
-        assert((boolean*)type == FALSE || (boolean*)type == TRUE);
+        assert(type == (boolean*)FALSE || type == (boolean*)TRUE);
     }
     if (!isInitialized) {
         return INITIALIZATION_ERROR;
