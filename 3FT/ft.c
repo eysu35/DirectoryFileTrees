@@ -259,7 +259,8 @@ int FT_insertDir(char *path) {
     fileNode = FT_getFileNode(path);
     pathCopy = NULL;
     if (fileNode != NULL) {
-        strcpy(pathCopy, Node_getPath(fileNode));
+        pathCopy = Node_getPath(fileNode);
+        /* strcpy(pathCopy, Node_getPath(fileNode)); */
         if (FT_containsFile(pathCopy)) {
             return NOT_A_DIRECTORY;
         }
