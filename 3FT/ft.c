@@ -346,6 +346,8 @@ static int FT_rmPathAt(const char* path, Node_T curr) {
 */
 int FT_rmDir(char *path) {
     Node_T curr;
+    Node_T fileNode;
+    char *pathCopy;
     int result;
 
     assert(CheckerFT_isValid(isInitialized,root,count));
@@ -359,6 +361,17 @@ int FT_rmDir(char *path) {
         result =  NO_SUCH_PATH;
     else
         result = FT_rmPathAt(path, curr);
+
+    /* manipulate path so it is a prefix up to the first file instance. */
+    fileNode = FT_getFileNode(path);
+    pathCopy = NULL;
+    if (fileNode != NULL) {
+        pathCopy = Node_getPath(fileNode);
+        /* strcpy(pathCopy, Node_getPath(fileNode)); */
+        if (FT_containsFile(pathCopy)) {
+            return NOT_A_DIRECTORY;
+        }
+    }
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
