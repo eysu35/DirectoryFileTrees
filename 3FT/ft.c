@@ -246,9 +246,6 @@ boolean FT_containsDir(char *path) {
         return FALSE;
     }
     curr = FT_getEndOfPathNode(path, root);
-
-    if (Node_getType(curr) == FT_FILE)
-        return FALSE;
         
     if(curr == NULL)
         result = FALSE;
