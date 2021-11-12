@@ -34,9 +34,7 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
     size_t i;
 
     assert(path != NULL);
-
-    if(curr == NULL)
-        return CONFLICTING_PATH;
+    assert(curr != NULL);
 
     /* If query path and path to current node are equivalent (and the current
     node is a directory), return the currrent node. If they match and
@@ -214,6 +212,10 @@ int FT_insertDir(char *path) {
 
     if(!isInitialized)
         return INITIALIZATION_ERROR;
+
+    if (root == NULL){
+        return CONFLICTING_PATH;
+    }
     
     /* Gets node at the end of the query path, so we can insert directory
     at the end of this path. */
