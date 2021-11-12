@@ -91,7 +91,7 @@ Node_T Node_getParent(Node_T n);
    always stored at index 0 of DynArray. Return the old contents
    of node n, which may be NULL. 
 */
-DynArray_T Node_updateFileContents(Node_T n, char *contents);
+void* Node_updateFileContents(Node_T n, void *contents);
 
 
 /*

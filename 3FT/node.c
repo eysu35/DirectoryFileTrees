@@ -224,9 +224,9 @@ Node_T Node_getParent(Node_T n) {
 }
 
 /* For Node_T n, updates n's old contents to contents. */
-DynArray_T Node_updateFileContents(Node_T n, void *contents) {
+void* Node_updateFileContents(Node_T n, void *contents) {
    size_t i = 0;
-   dynArray old_contents;
+   void *old_contents;
 
    assert(n != NULL);
    assert(CheckerFT_Node_isValid(n));
