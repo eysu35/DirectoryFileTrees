@@ -159,7 +159,7 @@ static int FT_insertRestOfPath(char* path, Node_T parent, nodeType type) {
         newCount++;
 
         if(firstNew == NULL){
-            if (type == FT_FILE) {
+            if (Node_getType(new) == FT_FILE) {
                 (void) Node_destroy(new);
                 free(copyPath);
                 return CONFLICTING_PATH;
