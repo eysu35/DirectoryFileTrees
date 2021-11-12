@@ -422,10 +422,9 @@ int FT_insertFile(char *path, void *contents, size_t length){
         return NOT_A_DIRECTORY;
     }
 
-    /* set current to last existing node in the path */ 
+    /* Get directory node farthest down given path and 
+    insert file node as a child. */
     curr = FT_getEndOfPathNode(path, root);
-
-    /* Insert file as node at appropriate location. */
     result = FT_insertRestOfPath(path, curr, FT_FILE);
 
     if (result != SUCCESS) {
@@ -436,7 +435,16 @@ int FT_insertFile(char *path, void *contents, size_t length){
     /* this will only return NULL if curr is a directory or if
     contents itself is NULL. We will check for the first case. 
     The second is acceptable. */
+    oldContents = FT_replaceFileContents(path, contents, length);
+    if (oldContents == NULL) {
+        if (Node_getLength(curr) == 0) {
+            return MEMORY_ERROR;
+        }
+    }
+    
+    /*
     curr = FT_getFileNode(path);
+    
     assert(curr != NULL);
     assert(Node_getType(curr) == FT_FILE);
 
@@ -448,12 +456,16 @@ int FT_insertFile(char *path, void *contents, size_t length){
             return MEMORY_ERROR;
         }
     }
+    */
+
 
     /* check if reuslt is null */
+    /*
     if (result != SUCCESS) {
         Node_destroy(curr);
         return result;
     }
+    */
 
     assert(CheckerFT_isValid(isInitialized,root,count));
     return result;
