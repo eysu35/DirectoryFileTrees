@@ -17,7 +17,18 @@ information given in the "Policies" web page (also available on armlab
 in the file ~cos217/AuthorizedSourcesList ) to this section of the
 readme file, and edit it as appropriate.
 
+The course's lectures.
 
+The course's precepts.
+
+The course's website.
+
+Documents that are referenced directly by the course's website. Such 
+documents include the course's lecture slides and precept handouts.
+
+The course's current staff members outside of class time through office hours.
+
+Current lab teaching assistants through visits to the course labs.
 
 ------------------------------------------------------------------------
 Student 2: What authorized sources of information did you use to
@@ -26,7 +37,28 @@ information given in the "Policies" web page (also available on armlab
 in the file ~cos217/AuthorizedSourcesList ) to this section of the
 readme file, and edit it as appropriate.
 
+The course's lectures.
 
+The course's precepts.
+
+The course's website.
+
+Documents that are referenced directly by the course's website. Such 
+documents include the course's lecture slides and precept handouts.
+
+The course's textbooks.
+
+The man pages on the armlab cluster.
+
+The course's current staff members outside of class time through office hours.
+
+The course's current staff members outside of class time through meetings.
+
+The course's current staff members outside of class time through Ed.
+
+The course's current staff members outside of class time through e-mail.
+
+Current lab teaching assistants through visits to the course labs.
 
 ------------------------------------------------------------------------
 Student 1: What unauthorized sources of information did you use to
@@ -40,7 +72,7 @@ nature of the interaction, may additionally require the interaction
 being reported to the Committee on Discipline. Write "None" if you used
 no unauthorized sources of information.
 
-
+None
 
 ------------------------------------------------------------------------
 Student 2: What unauthorized sources of information did you use to
@@ -54,7 +86,7 @@ nature of the interaction, may additionally require the interaction
 being reported to the Committee on Discipline. Write "None" if you used
 no unauthorized sources of information.
 
-
+None
 
 ------------------------------------------------------------------------
 Student 1: What is your assessment of the assignment? Was it helpful?
@@ -146,7 +178,14 @@ specified in Step 2.5?
 1) DT_traversePathFrom is poorly named. It does not specify what it is 
 traversing the path for (the last existing node in the path).
 
-2) DT_traversePath is a useless function. All it does is call
-DT_traversePAth
+2) DT_traversePath is a useless function. All it does is check to make
+sure path is not null and call DT_traversePathAt with path. Since 
+DT_traversePathAt also asserts that path != NULL, this function is
+pointless. 
+
+3) DT_rmPathFrom is a useless function. It is only called in DT_rmPathAt
+to remove the node curr and all its children. Since DT_rmPathFrom is a
+one line function, it seves no purpose to modularize this.
+
 
 ------------------------------------------------------------------------
