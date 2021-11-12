@@ -335,6 +335,7 @@ int FT_rmDir(char *path) {
 */
 int FT_insertFile(char *path, void *contents, size_t length){
     Node_T curr;
+    int i;
     int result;
 
     assert(CheckerFT_isValid(isInitialized, root, count));
@@ -360,6 +361,11 @@ int FT_insertFile(char *path, void *contents, size_t length){
 
     /* Set file contents. */
     curr = FT_getEndOfPathNode(path, root);
+    for (i = 0; i < Node_getNumChildren(curr); i++) {
+        if (strcmp(Node_getPath(Node_getChild(curr, i)), path)){
+            curr = Node_getChild(curr, i);
+        }
+    }
     result = Node_updateFileContents(curr, contents);
 
     if (result != SUCCESS) {
