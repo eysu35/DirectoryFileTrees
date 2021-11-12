@@ -82,7 +82,11 @@ None
 Student 1: What is your assessment of the assignment? Was it helpful?
 Was it fun?
 
-
+I thought this assignment was useful to learn about gdb, modularity,
+and debugging. However, I also found the work in part 3 a bit 
+frustrating as the volumn of functions and code we were working with
+made it very complicated to debug. It was somewhat helpful to my 
+learning and was not the most fun assignment. 
 
 ------------------------------------------------------------------------
 Student 2: What is your assessment of the assignment? Was it helpful?
@@ -111,7 +115,9 @@ inflicting unecessary stress and time on students.
 will help your grader to grade it in the most favorable light? In
 particular, what bugs are in your submission?
 
-
+We understand that some of are files are very long and so we added
+many comments throughout the code to try and help the grader 
+understand our work! Hopefully it is clear enough :)
 
 ------------------------------------------------------------------------
 What warnings does splint generate for Part 2's checker, and what are
@@ -127,7 +133,25 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
+a4def.h: line 17: high priority:
+A comment should appear above each global variable.
 
+There is a comment above line 17 in a4def.h that says "/* In lieu 
+of a proper boolean datatype */". Not sure why CritTer is not
+picking this up. 
+
+checkerDT.c: line 58: low priority:
+This area is deeply nested at level 4, consider refactoring
+
+checkerDT.c: line 62: low priority:
+This area is deeply nested at level 4, consider refactoring
+
+checkerDT.c: line 67: low priority:
+This area is deeply nested at level 4, consider refactoring
+
+If we want to check very specific cases in our code, we must use
+nested conditionals to filter for the cases that we want. Thus, 
+this deep nesting, although not ideal, is acceptable in 
 
 ------------------------------------------------------------------------
 What warnings does splint generate on your Part 3 code, and what are
@@ -135,7 +159,36 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
+node.c: (in function Node_hasChild)
+node.c:197:18: Variable index used before definition
+An rvalue is used that may not be initialized to a value on some execution
+path. (Use -usedef to inhibit warning)
+node.c: (in function Node_updateFileContents)
+node.c:245:11: Variable oldContents used before definition
+node.c: (in function Node_unlinkChild)
+node.c:343:48: Variable i used before definition
+dynarray.c: (in function DynArray_bsearch)
+dynarray.c:428:27: Variable ppvInsert used before definition
 
+These first three errors are worried that we are returning or accessing
+variables that were defined in function calls or conditionals. For ex,
+some of these variables are manipulated by passing their memory address
+to dynarray_bsearch. However, we are confident that each of the functions
+that manipulate these variables are essential to the module working and 
+thus these variables will all be initialized at the end. 
+
+ft.h:34:9: Function exported but not used outside ft: FT_containsDir
+A declaration is exported, but not used outside this module. Declaration can
+use static qualifier. (Use -exportlocal to inhibit warning)
+ft.c:399:1: Definition of FT_containsDir
+ft.h:63:9: Function exported but not used outside ft: FT_containsFile
+ft.c:527:1: Definition of FT_containsFile
+node.h:87:5: Function exported but not used outside node: Node_hasChild
+node.c:200:1: Definition of Node_hasChild
+
+These next three errors are all occurring because some functions are 
+only used within their own files. We believe it is alright to have
+these helper functions within our programs that keep the code modular. 
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on your Part 3 code, and what are
