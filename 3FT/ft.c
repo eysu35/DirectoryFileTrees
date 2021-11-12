@@ -503,10 +503,8 @@ int FT_rmFile(char *path){
         }
     }
         
-
     parent = Node_getParent(curr);
     Node_unlinkChild(parent, curr);
-    free(Node_getFileContents(curr));
     count -= Node_destroy(curr);
     result = SUCCESS;
 
