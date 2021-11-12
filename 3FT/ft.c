@@ -70,7 +70,9 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
     return NULL;
 }
 
-/* Returns file node at given path, or NULL if it does not exist. */
+/* 
+    Returns file node at given path, or NULL if it does not exist. 
+*/
 static Node_T FT_getFileNode(char *path) {
     Node_T fileNode;
     Node_T child;
@@ -79,11 +81,15 @@ static Node_T FT_getFileNode(char *path) {
 
     assert(path != NULL);
 
+    /* Retrieve directory node closest to file node
+    along given path. */
     parent = FT_getEndOfPathNode(path, root);
     if (parent == NULL) {
         return NULL;
     }
 
+    /* Examine directory node's children to find file node at given path.
+    If no file node exists, return NULL. */
     for (i = 0; i < Node_getNumChildren(parent); i++) {
         child = Node_getChild(parent, i);
         if (child == NULL) {
@@ -113,7 +119,7 @@ static int FT_linkParentToChild(Node_T parent, Node_T child) {
       return PARENT_CHILD_ERROR;
    }
 
-   return (int) SUCCESS;
+   return SUCCESS;
 }
 
 /*
