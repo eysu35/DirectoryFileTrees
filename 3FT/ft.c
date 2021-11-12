@@ -37,7 +37,6 @@ static Node_T FT_getEndOfPathNode(char *path, Node_T curr) {
     size_t i;
 
     assert(path != NULL);
-    assert(curr != NULL);
 
     /* If root is NULL, then return NULL. */
     if (curr == NULL){
